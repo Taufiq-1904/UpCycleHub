@@ -1,0 +1,70 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class StorageService extends GetxService {
+  late SharedPreferences _prefs;
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  );
+
+  static const String _tokenKey = 'auth_token';
+  static const String _userIdKey = 'user_id';
+  static const String _userRoleKey = 'user_role';
+  static const String _darkModeKey = 'dark_mode';
+  static const String _userDataKey = 'user_data';
+
+  Future<StorageService> init() async {
+    _prefs = await SharedPreferences.getInstance();
+    return this;
+  }
+
+  // Token
+  Future<void> saveToken(String token) async {
+    await _secureStorage.write(key: _tokenKey, value: token);
+  }
+
+  Future<String?> getToken() async {
+    return await _secureStorage.read(key: _tokenKey);
+  }
+
+  Future<void> deleteToken() async {
+    await _secureStorage.delete(key: _tokenKey);
+  }
+
+  // User ID
+  Future<void> saveUserId(String userId) async {
+    await _prefs.setString(_userIdKey, userId);
+  }
+
+  String? get userId => _prefs.getString(_userIdKey);
+
+  // User Role
+  Future<void> saveUserRole(String role) async {
+    await _prefs.setString(_userRoleKey, role);
+  }
+
+  String get userRole => _prefs.getString(_userRoleKey) ?? 'buyer';
+
+  bool get isSeller => userRole == 'seller';
+
+  // Dark mode
+  bool get isDarkMode => _prefs.getBool(_darkModeKey) ?? false;
+
+  Future<void> setDarkMode(bool value) async {
+    await _prefs.setBool(_darkModeKey, value);
+  }
+
+  // User data
+  Future<void> saveUserData(String json) async {
+    await _prefs.setString(_userDataKey, json);
+  }
+
+  String? get userData => _prefs.getString(_userDataKey);
+
+  // Clear all (logout)
+  Future<void> clearAll() async {
+    await _secureStorage.deleteAll();
+    await _prefs.clear();
+  }
+}
