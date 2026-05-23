@@ -9,7 +9,7 @@ class AuthRepository {
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
-      final response = await _apiClient.post('/login', data: {
+      final response = await _apiClient.post('/auth/login', data: {
         'email': email,
         'password': password,
       });
@@ -29,7 +29,7 @@ class AuthRepository {
     required String role,
   }) async {
     try {
-      final response = await _apiClient.post('/register', data: {
+      final response = await _apiClient.post('/auth/register', data: {
         'name': name,
         'email': email,
         'password': password,

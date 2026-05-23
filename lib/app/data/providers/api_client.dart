@@ -4,7 +4,8 @@ import '../../services/storage_service.dart';
 import '../../routes/app_routes.dart';
 
 class ApiClient {
-  static const String baseUrl = 'http://localhost:3003/api';
+  static const String baseUrl =
+      'https://auth-service-420166052416.asia-southeast2.run.app';
 
   late dio.Dio _dio;
 
