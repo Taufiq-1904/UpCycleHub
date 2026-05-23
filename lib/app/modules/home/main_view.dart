@@ -16,28 +16,33 @@ class MainView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
     final authService = Get.find<AuthService>();
-    final isSeller = authService.isSeller;
 
+    // FIX: Ambil isSeller di dalam Obx agar reaktif
     return Obx(() {
       final index = controller.currentIndex.value;
+      // FIX: baca di dalam Obx supaya rebuild kalau role berubah
+      final isSeller = authService.currentUser.value?.role == 'seller';
+
+      final List<Widget> pages = isSeller
+          ? [
+              const SellerDashboardView(isEmbedded: true),
+              const ProductListView(isEmbedded: true),
+              const OrderListView(isEmbedded: true),
+              const ChatListView(isEmbedded: true),
+              const ProfileView(isEmbedded: true),
+            ]
+          : [
+              const HomeView(),
+              const ProductListView(isEmbedded: true),
+              const OrderListView(isEmbedded: true),
+              const ChatListView(isEmbedded: true),
+              const ProfileView(isEmbedded: true),
+            ];
+
       return Scaffold(
         body: IndexedStack(
           index: index,
-          children: isSeller
-              ? [
-                  const SellerDashboardView(isEmbedded: true),
-                  const ProductListView(isEmbedded: true),
-                  const OrderListView(isEmbedded: true),
-                  const ChatListView(isEmbedded: true),
-                  const ProfileView(isEmbedded: true),
-                ]
-              : [
-                  const HomeView(),
-                  const ProductListView(isEmbedded: true),
-                  const OrderListView(isEmbedded: true),
-                  const ChatListView(isEmbedded: true),
-                  const ProfileView(isEmbedded: true),
-                ],
+          children: pages,
         ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(

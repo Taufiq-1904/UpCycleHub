@@ -24,6 +24,7 @@ class ProductCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Get.toNamed(AppRoutes.PRODUCT_DETAIL, arguments: product),
       child: Container(
+        // FIX: Tambahkan constraints agar card tidak overflow di GridView
         decoration: BoxDecoration(
           color: isDark ? AppTheme.darkCard : AppTheme.white,
           borderRadius: BorderRadius.circular(16),
@@ -40,6 +41,8 @@ class ProductCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          // FIX: mainAxisSize.min agar Column tidak memaksa expand
+          mainAxisSize: MainAxisSize.min,
           children: [
             // Product Image
             ClipRRect(
@@ -123,11 +126,12 @@ class ProductCard extends StatelessWidget {
                 ],
               ),
             ),
-            // Product Info
+            // Product Info — FIX: bungkus dengan Flexible agar tidak overflow
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     product.name,
@@ -215,6 +219,7 @@ class ProductCardSkeleton extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               width: double.infinity,
@@ -228,6 +233,7 @@ class ProductCardSkeleton extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                       height: 14, width: double.infinity, color: Colors.white),

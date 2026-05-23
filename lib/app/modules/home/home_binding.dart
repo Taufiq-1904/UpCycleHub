@@ -10,15 +10,20 @@ import '../../services/auth_service.dart';
 class HomeBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => HomeController());
-    Get.lazyPut(() => ProductListController());
-    Get.lazyPut(() => OrderListController());
-    Get.lazyPut(() => ChatListController());
-    Get.lazyPut(() => ProfileController());
+    // FIX: Ganti lazyPut → put(fenix: true)
+    // lazyPut hanya inisialisasi saat Get.find() pertama dipanggil.
+    // IndexedStack langsung build semua tab sekaligus, sehingga
+    // controller yang lazyPut belum ada saat view pertama di-render → blank/crash.
+    // fenix: true = controller dibuat ulang kalau sudah di-dispose (aman untuk tab)
+    Get.put(HomeController(), permanent: false);
+    Get.put(ProductListController(), permanent: false);
+    Get.put(OrderListController(), permanent: false);
+    Get.put(ChatListController(), permanent: false);
+    Get.put(ProfileController(), permanent: false);
 
     final authService = Get.find<AuthService>();
     if (authService.isSeller) {
-      Get.lazyPut(() => SellerDashboardController());
+      Get.put(SellerDashboardController(), permanent: false);
     }
   }
 }
