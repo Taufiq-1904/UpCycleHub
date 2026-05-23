@@ -23,6 +23,7 @@ class LoginView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 40),
+
                 // Logo
                 Center(
                   child: Column(
@@ -46,7 +47,7 @@ class LoginView extends StatelessWidget {
                                   fontWeight: FontWeight.w700,
                                 ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       Text(
                         'Marketplace Upcycling Terpercaya',
                         style: Theme.of(context).textTheme.bodyMedium,
@@ -55,22 +56,61 @@ class LoginView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 40),
-                Text(
-                  'Selamat Datang!',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Masuk ke akunmu untuk melanjutkan',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 32),
 
-                // Email
-                Text(
-                  'Email',
-                  style: Theme.of(context).textTheme.titleMedium,
+                // ── Demo info card ────────────────────────────────────────
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: AppTheme.softGreen,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppTheme.accentGreen),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.info_outline_rounded,
+                              size: 16, color: AppTheme.primaryGreen),
+                          SizedBox(width: 6),
+                          Text('Akun Demo (tanpa backend)',
+                              style: TextStyle(
+                                  color: AppTheme.primaryGreen,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 13)),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      _DemoRow(
+                        icon: Icons.shopping_bag_outlined,
+                        label: 'Pembeli',
+                        email: 'buyer@demo.com',
+                        description:
+                            'Browsing, cart, checkout, chat dengan seller',
+                      ),
+                      const SizedBox(height: 6),
+                      _DemoRow(
+                        icon: Icons.storefront_outlined,
+                        label: 'Penjual',
+                        email: 'seller@demo.com',
+                        description:
+                            'Dashboard, tambah/edit produk, kelola toko',
+                      ),
+                      const SizedBox(height: 4),
+                      const Text(
+                        'Password keduanya: password123',
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: AppTheme.primaryGreen,
+                            fontStyle: FontStyle.italic),
+                      ),
+                    ],
+                  ),
                 ),
+                const SizedBox(height: 28),
+
+                // Email field
+                Text('Email', style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: controller.emailController,
@@ -83,11 +123,9 @@ class LoginView extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
 
-                // Password
-                Text(
-                  'Password',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+                // Password field
+                Text('Password',
+                    style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
                 Obx(() => TextFormField(
                       controller: controller.passwordController,
@@ -98,17 +136,15 @@ class LoginView extends StatelessWidget {
                         prefixIcon: const Icon(Icons.lock_outline_rounded),
                         suffixIcon: IconButton(
                           onPressed: controller.togglePassword,
-                          icon: Icon(
-                            controller.obscurePassword.value
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                          ),
+                          icon: Icon(controller.obscurePassword.value
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined),
                         ),
                       ),
                     )),
-                const SizedBox(height: 32),
+                const SizedBox(height: 28),
 
-                // Login Button
+                // Login button
                 Obx(() => AppButton(
                       text: 'Masuk',
                       onPressed: controller.login,
@@ -116,50 +152,36 @@ class LoginView extends StatelessWidget {
                     )),
                 const SizedBox(height: 16),
 
-                // Demo Buttons
+                // Demo shortcut buttons
                 Row(
                   children: [
                     Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => controller.loginDemo(role: 'buyer'),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppTheme.primaryGreen,
-                          side: const BorderSide(color: AppTheme.primaryGreen),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                        child: const Text('Demo Buyer'),
+                      child: _DemoButton(
+                        icon: Icons.shopping_bag_outlined,
+                        label: 'Demo Pembeli',
+                        color: AppTheme.primaryGreen,
+                        onTap: () => controller.loginDemo(role: 'buyer'),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => controller.loginDemo(role: 'seller'),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppTheme.lightGreen,
-                          side: const BorderSide(color: AppTheme.lightGreen),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                        child: const Text('Demo Seller'),
+                      child: _DemoButton(
+                        icon: Icons.storefront_outlined,
+                        label: 'Demo Penjual',
+                        color: AppTheme.lightGreen,
+                        onTap: () => controller.loginDemo(role: 'seller'),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 32),
 
-                // Register
+                // Register link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Belum punya akun? ',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
+                    Text('Belum punya akun? ',
+                        style: Theme.of(context).textTheme.bodyMedium),
                     GestureDetector(
                       onTap: () => Get.toNamed(AppRoutes.REGISTER),
                       child: const Text(
@@ -176,6 +198,78 @@ class LoginView extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Baris info akun demo
+class _DemoRow extends StatelessWidget {
+  final IconData icon;
+  final String label, email, description;
+
+  const _DemoRow({
+    required this.icon,
+    required this.label,
+    required this.email,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 16, color: AppTheme.darkGreen),
+        const SizedBox(width: 6),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              style: const TextStyle(fontSize: 12, color: AppTheme.darkGreen),
+              children: [
+                TextSpan(
+                    text: '$label: ',
+                    style: const TextStyle(fontWeight: FontWeight.w700)),
+                TextSpan(
+                    text: email,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        decoration: TextDecoration.underline)),
+                TextSpan(text: ' — $description'),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Tombol demo dengan ikon
+class _DemoButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _DemoButton({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton.icon(
+      onPressed: onTap,
+      icon: Icon(icon, size: 16),
+      label: Text(label, style: const TextStyle(fontSize: 12)),
+      style: OutlinedButton.styleFrom(
+        foregroundColor: color,
+        side: BorderSide(color: color, width: 1.5),
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }

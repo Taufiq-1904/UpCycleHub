@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../services/storage_service.dart';
+import 'storage_service.dart';
 import '../data/models/user_model.dart';
 import 'dart:convert';
 
@@ -26,8 +26,25 @@ class AuthService extends GetxService {
     }
   }
 
-  Future<void> saveUser(UserModel user, String token) async {
+  /// Simpan token saja (sebelum getProfile dipanggil)
+  /// Dipakai saat login/register: token ada duluan, user belum
+  Future<void> saveTokenOnly(String token, String? refreshToken) async {
     await _storageService.saveToken(token);
+    if (refreshToken != null && refreshToken.isNotEmpty) {
+      await _storageService.saveRefreshToken(refreshToken);
+    }
+  }
+
+  /// Simpan user lengkap + token (final step setelah getProfile)
+  Future<void> saveUser(
+    UserModel user,
+    String token, {
+    String? refreshToken,
+  }) async {
+    await _storageService.saveToken(token);
+    if (refreshToken != null && refreshToken.isNotEmpty) {
+      await _storageService.saveRefreshToken(refreshToken);
+    }
     await _storageService.saveUserId(user.id);
     await _storageService.saveUserRole(user.role);
     await _storageService.saveUserData(jsonEncode(user.toJson()));

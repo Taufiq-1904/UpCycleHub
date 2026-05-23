@@ -9,6 +9,7 @@ class StorageService extends GetxService {
   );
 
   static const String _tokenKey = 'auth_token';
+  static const String _refreshTokenKey = 'refresh_token';
   static const String _userIdKey = 'user_id';
   static const String _userRoleKey = 'user_role';
   static const String _darkModeKey = 'dark_mode';
@@ -19,7 +20,7 @@ class StorageService extends GetxService {
     return this;
   }
 
-  // Token
+  // ── Token ─────────────────────────────────────────────────────────────────
   Future<void> saveToken(String token) async {
     await _secureStorage.write(key: _tokenKey, value: token);
   }
@@ -32,37 +33,45 @@ class StorageService extends GetxService {
     await _secureStorage.delete(key: _tokenKey);
   }
 
-  // User ID
+  // ── Refresh Token ─────────────────────────────────────────────────────────
+  Future<void> saveRefreshToken(String token) async {
+    await _secureStorage.write(key: _refreshTokenKey, value: token);
+  }
+
+  Future<String?> getRefreshToken() async {
+    return await _secureStorage.read(key: _refreshTokenKey);
+  }
+
+  // ── User ID ───────────────────────────────────────────────────────────────
   Future<void> saveUserId(String userId) async {
     await _prefs.setString(_userIdKey, userId);
   }
 
   String? get userId => _prefs.getString(_userIdKey);
 
-  // User Role
+  // ── User Role ─────────────────────────────────────────────────────────────
   Future<void> saveUserRole(String role) async {
     await _prefs.setString(_userRoleKey, role);
   }
 
   String get userRole => _prefs.getString(_userRoleKey) ?? 'buyer';
-
   bool get isSeller => userRole == 'seller';
 
-  // Dark mode
+  // ── Dark Mode ─────────────────────────────────────────────────────────────
   bool get isDarkMode => _prefs.getBool(_darkModeKey) ?? false;
 
   Future<void> setDarkMode(bool value) async {
     await _prefs.setBool(_darkModeKey, value);
   }
 
-  // User data
+  // ── User Data ─────────────────────────────────────────────────────────────
   Future<void> saveUserData(String json) async {
     await _prefs.setString(_userDataKey, json);
   }
 
   String? get userData => _prefs.getString(_userDataKey);
 
-  // Clear all (logout)
+  // ── Clear All (logout) ────────────────────────────────────────────────────
   Future<void> clearAll() async {
     await _secureStorage.deleteAll();
     await _prefs.clear();
