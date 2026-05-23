@@ -43,7 +43,6 @@ class RegisterController extends GetxController {
         name: nameController.text.trim(),
         email: emailController.text.trim(),
         password: passwordController.text,
-        role: selectedRole.value,
       );
       final authService = Get.find<AuthService>();
       await authService.saveUser(result['user'], result['token']);

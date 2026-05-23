@@ -4,6 +4,7 @@ import '../../data/repositories/auth_repository.dart';
 import '../../data/providers/api_client.dart';
 import '../../services/auth_service.dart';
 import '../../routes/app_routes.dart';
+import '../../services/storage_service.dart';
 
 class LoginController extends GetxController {
   final emailController = TextEditingController();
@@ -31,15 +32,32 @@ class LoginController extends GetxController {
 
   Future<void> login() async {
     if (!formKey.currentState!.validate()) return;
+
     isLoading.value = true;
+
     try {
       final result = await _authRepo.login(
         emailController.text.trim(),
         passwordController.text,
       );
+
+      // Simpan token sementara
+      await Get.find<StorageService>().saveToken(result['token']);
+
+      // Ambil profile user
+      final profile = await _authRepo.getProfile();
+
+      // Simpan user + token
       final authService = Get.find<AuthService>();
-      await authService.saveUser(result['user'], result['token']);
-      Get.offAllNamed(AppRoutes.MAIN);
+
+      await authService.saveUser(
+        profile,
+        result['token'],
+      );
+
+      Get.offAllNamed(
+        AppRoutes.MAIN,
+      );
     } catch (e) {
       Get.snackbar(
         'Login Gagal',

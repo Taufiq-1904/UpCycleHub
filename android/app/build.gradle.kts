@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
-
     id("com.google.gms.google-services")
 }
 
@@ -49,7 +48,7 @@ dependencies {
 
     implementation(
         platform(
-            "com.google.firebase:firebase-bom:33.15.0"
+            "com.google.firebase:firebase-bom:34.13.0"
         )
     )
 
