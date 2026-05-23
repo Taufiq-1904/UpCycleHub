@@ -42,7 +42,10 @@ class ProfileView extends StatelessWidget {
                               : null,
                           child: user?.avatar == null
                               ? Text(
-                                  (user?.name ?? 'U')[0].toUpperCase(),
+                                  (user?.name?.isNotEmpty == true
+                                          ? user!.name[0]
+                                          : 'U')
+                                      .toUpperCase(),
                                   style: const TextStyle(
                                     color: AppTheme.primaryGreen,
                                     fontSize: 32,

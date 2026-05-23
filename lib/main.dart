@@ -8,9 +8,11 @@ import 'app/routes/app_routes.dart';
 import 'app/themes/app_theme.dart';
 import 'app/services/storage_service.dart';
 import 'app/services/auth_service.dart';
+import 'package:intl/date_symbol_data_local.dart'; // ← tambah ini
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('id_ID', null);
 
   // Set system UI
   SystemChrome.setSystemUIOverlayStyle(
