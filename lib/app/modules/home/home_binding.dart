@@ -22,8 +22,8 @@ class HomeBinding extends Bindings {
     Get.put(ProfileController(), permanent: false);
 
     final authService = Get.find<AuthService>();
-    if (authService.isSeller) {
-      Get.put(SellerDashboardController(), permanent: false);
+    if (authService.ispenjual) {
+      Get.put(penjualDashboardController(), permanent: false);
     }
   }
 }

@@ -32,13 +32,12 @@ class AuthService extends GetxService {
     String token,
     String? refreshToken,
   ) async {
-    print("SAVE TOKEN => $token");
+    print("TOKEN BEFORE SAVE => $token");
 
     await _storageService.saveToken(token);
+    final saved = await _storageService.getToken();
 
-    final check = await _storageService.getToken();
-
-    print("TOKEN AFTER SAVE => $check");
+    print("TOKEN AFTER SAVE => $saved");
 
     if (refreshToken != null && refreshToken.isNotEmpty) {
       await _storageService.saveRefreshToken(refreshToken);
@@ -68,7 +67,7 @@ class AuthService extends GetxService {
     isLoggedIn.value = false;
   }
 
-  bool get isSeller => currentUser.value?.role == 'seller';
+  bool get ispenjual => currentUser.value?.role == 'penjual';
   String get userId => currentUser.value?.id ?? '';
   String get userName => currentUser.value?.name ?? '';
 }

@@ -35,7 +35,8 @@ class OrderRepository {
     }
   }
 
-  Future<OrderModel> uploadPaymentProof(String orderId, FormData formData) async {
+  Future<OrderModel> uploadPaymentProof(
+      String orderId, FormData formData) async {
     try {
       final response = await _apiClient.productPostFormData(
         '/transaksi/$orderId/payment-proof',

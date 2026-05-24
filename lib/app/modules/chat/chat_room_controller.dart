@@ -33,7 +33,7 @@ class ChatRoomController extends GetxController {
       product = args['product'] as ProductModel;
       chatRoom = null;
       chatRoomId = AppUtils.generateChatRoomId(
-          _authService.userId, product!.sellerId, product!.id);
+          _authService.userId, product!.penjualId, product!.id);
       _ensureChatRoomExists();
     }
 
@@ -54,18 +54,18 @@ class ChatRoomController extends GetxController {
     if (!doc.exists) {
       final user = _authService.currentUser.value!;
       await _firestore.collection('chatRooms').doc(chatRoomId).set({
-        'buyerId': user.id,
-        'buyerName': user.name,
-        'buyerAvatar': user.avatar,
-        'sellerId': product!.sellerId,
-        'sellerName': product!.sellerName,
-        'sellerAvatar': product!.sellerAvatar,
+        'pembeliId': user.id,
+        'pembeliName': user.name,
+        'pembeliAvatar': user.avatar,
+        'penjualId': product!.penjualId,
+        'penjualName': product!.penjualName,
+        'penjualAvatar': product!.penjualAvatar,
         'productId': product!.id,
         'productName': product!.name,
         'lastMessage': '',
         'lastMessageTime': Timestamp.now(),
-        'isReadByBuyer': true,
-        'isReadBySeller': true,
+        'isReadBypembeli': true,
+        'isReadBypenjual': true,
       });
     }
   }
@@ -85,9 +85,9 @@ class ChatRoomController extends GetxController {
   }
 
   void _markAsRead() {
-    final isSeller = _authService.isSeller;
+    final ispenjual = _authService.ispenjual;
     _firestore.collection('chatRooms').doc(chatRoomId).update({
-      isSeller ? 'isReadBySeller' : 'isReadByBuyer': true,
+      ispenjual ? 'isReadBypenjual' : 'isReadBypembeli': true,
     }).catchError((_) {});
   }
 
@@ -110,7 +110,7 @@ class ChatRoomController extends GetxController {
     isSending.value = true;
 
     final user = _authService.currentUser.value!;
-    final isSeller = _authService.isSeller;
+    final ispenjual = _authService.ispenjual;
 
     try {
       final msg = {
@@ -129,7 +129,7 @@ class ChatRoomController extends GetxController {
       await _firestore.collection('chatRooms').doc(chatRoomId).update({
         'lastMessage': text,
         'lastMessageTime': Timestamp.now(),
-        isSeller ? 'isReadByBuyer' : 'isReadBySeller': false,
+        ispenjual ? 'isReadBypembeli' : 'isReadBypenjual': false,
       });
     } finally {
       isSending.value = false;
@@ -140,8 +140,10 @@ class ChatRoomController extends GetxController {
 
   String get otherName {
     if (chatRoom != null) {
-      return _authService.isSeller ? chatRoom!.buyerName : chatRoom!.sellerName;
+      return _authService.ispenjual
+          ? chatRoom!.pembeliName
+          : chatRoom!.penjualName;
     }
-    return product?.sellerName ?? '';
+    return product?.penjualName ?? '';
   }
 }

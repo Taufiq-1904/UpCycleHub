@@ -7,15 +7,15 @@ import '../../utils/app_utils.dart';
 import '../../widgets/state_widgets.dart';
 import '../../routes/app_routes.dart';
 
-class SellerProductView extends StatelessWidget {
-  /// true  → dipakai sebagai tab di SellerMainView (tidak ada back button)
+class penjualProductView extends StatelessWidget {
+  /// true  → dipakai sebagai tab di penjualMainView (tidak ada back button)
   /// false → dibuka sebagai halaman standalone (ada back button)
   final bool isEmbedded;
-  const SellerProductView({super.key, this.isEmbedded = false});
+  const penjualProductView({super.key, this.isEmbedded = false});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<SellerProductController>();
+    final controller = Get.find<penjualProductController>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -31,7 +31,7 @@ class SellerProductView extends StatelessWidget {
               ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Get.toNamed(AppRoutes.SELLER_ADD_PRODUCT),
+        onPressed: () => Get.toNamed(AppRoutes.penjual_ADD_PRODUCT),
         backgroundColor: AppTheme.primaryGreen,
         icon: const Icon(Icons.add_rounded, color: Colors.white),
         label: const Text('Tambah',
@@ -45,7 +45,7 @@ class SellerProductView extends StatelessWidget {
             subtitle: 'Tambahkan produk pertamamu sekarang!',
             icon: Icons.add_box_outlined,
             buttonText: 'Tambah Produk',
-            onButtonPressed: () => Get.toNamed(AppRoutes.SELLER_ADD_PRODUCT),
+            onButtonPressed: () => Get.toNamed(AppRoutes.penjual_ADD_PRODUCT),
           );
         }
         return RefreshIndicator(
@@ -118,7 +118,7 @@ class SellerProductView extends StatelessWidget {
                       children: [
                         IconButton(
                           onPressed: () => Get.toNamed(
-                              AppRoutes.SELLER_EDIT_PRODUCT,
+                              AppRoutes.penjual_EDIT_PRODUCT,
                               arguments: product),
                           icon: const Icon(Icons.edit_outlined,
                               color: AppTheme.infoBlue, size: 20),

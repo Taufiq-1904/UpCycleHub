@@ -84,15 +84,15 @@ class LoginView extends StatelessWidget {
                       _DemoRow(
                         icon: Icons.shopping_bag_outlined,
                         label: 'Pembeli',
-                        email: 'buyer@demo.com',
+                        email: 'pembeli@demo.com',
                         description:
-                            'Browsing, cart, checkout, chat dengan seller',
+                            'Browsing, cart, checkout, chat dengan penjual',
                       ),
                       const SizedBox(height: 6),
                       _DemoRow(
                         icon: Icons.storefront_outlined,
                         label: 'Penjual',
-                        email: 'seller@demo.com',
+                        email: 'penjual@demo.com',
                         description:
                             'Dashboard, tambah/edit produk, kelola toko',
                       ),
@@ -160,7 +160,7 @@ class LoginView extends StatelessWidget {
                         icon: Icons.shopping_bag_outlined,
                         label: 'Demo Pembeli',
                         color: AppTheme.primaryGreen,
-                        onTap: () => controller.loginDemo(role: 'buyer'),
+                        onTap: () => controller.loginDemo(role: 'pembeli'),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -169,7 +169,7 @@ class LoginView extends StatelessWidget {
                         icon: Icons.storefront_outlined,
                         label: 'Demo Penjual',
                         color: AppTheme.lightGreen,
-                        onTap: () => controller.loginDemo(role: 'seller'),
+                        onTap: () => controller.loginDemo(role: 'penjual'),
                       ),
                     ),
                   ],

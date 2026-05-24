@@ -20,8 +20,8 @@ class CartController extends GetxController {
         price: item.price,
         quantity: newQty,
         maxStock: item.maxStock,
-        sellerId: item.sellerId,
-        sellerName: item.sellerName,
+        penjualId: item.penjualId,
+        penjualName: item.penjualName,
       );
     } else {
       items.add(CartItemModel.fromProduct(product, quantity: qty));

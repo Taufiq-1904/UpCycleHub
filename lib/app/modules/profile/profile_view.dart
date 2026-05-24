@@ -129,7 +129,7 @@ class ProfileView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        user?.role == 'seller' ? '🏪 Penjual' : '🛍️ Pembeli',
+                        user?.role == 'penjual' ? '🏪 Penjual' : '🛍️ Pembeli',
                         style: const TextStyle(
                           color: AppTheme.primaryGreen,
                           fontWeight: FontWeight.w600,
@@ -170,21 +170,21 @@ class ProfileView extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              if (authService.isSeller) ...[
+              if (authService.ispenjual) ...[
                 _MenuSection(
                   isDark: isDark,
-                  title: 'Seller',
+                  title: 'penjual',
                   items: [
                     _MenuItem(
                       icon: Icons.dashboard_outlined,
                       label: 'Dashboard Penjual',
-                      onTap: () => Get.toNamed(AppRoutes.SELLER_DASHBOARD),
+                      onTap: () => Get.toNamed(AppRoutes.penjual_DASHBOARD),
                     ),
                     _MenuItem(
                       icon: Icons.inventory_2_outlined,
                       label: 'Kelola Produk',
                       onTap: () =>
-                          Get.toNamed(AppRoutes.SELLER_PRODUCT_MANAGEMENT),
+                          Get.toNamed(AppRoutes.penjual_PRODUCT_MANAGEMENT),
                     ),
                   ],
                 ),

@@ -22,13 +22,16 @@ class StorageService extends GetxService {
 
   // ── Token ─────────────────────────────────────────────────────────────────
   Future<void> saveToken(String token) async {
-    await _secureStorage.write(key: _tokenKey, value: token);
+    await _secureStorage.write(
+      key: 'auth_token',
+      value: token,
+    );
   }
 
   Future<String?> getToken() async {
-    final token = await _secureStorage.read(key: _tokenKey);
-    print("READ TOKEN => $token");
-    return token;
+    return await _secureStorage.read(
+      key: 'auth_token',
+    );
   }
 
   Future<void> deleteToken() async {
@@ -56,8 +59,8 @@ class StorageService extends GetxService {
     await _prefs.setString(_userRoleKey, role);
   }
 
-  String get userRole => _prefs.getString(_userRoleKey) ?? 'buyer';
-  bool get isSeller => userRole == 'seller';
+  String get userRole => _prefs.getString(_userRoleKey) ?? 'pembeli';
+  bool get ispenjual => userRole == 'penjual';
 
   // ── Dark Mode ─────────────────────────────────────────────────────────────
   bool get isDarkMode => _prefs.getBool(_darkModeKey) ?? false;

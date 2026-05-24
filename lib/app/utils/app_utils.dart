@@ -68,8 +68,8 @@ class AppUtils {
 
   // Generate chat room ID
   static String generateChatRoomId(
-      String buyerId, String sellerId, String productId) {
-    final ids = [buyerId, sellerId, productId]..sort();
+      String pembeliId, String penjualId, String productId) {
+    final ids = [pembeliId, penjualId, productId]..sort();
     return ids.join('_');
   }
 }

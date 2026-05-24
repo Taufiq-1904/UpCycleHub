@@ -19,7 +19,7 @@ class ChatListController extends GetxController {
 
   void _listenChatRooms() {
     final userId = _authService.userId;
-    final field = _authService.isSeller ? 'sellerId' : 'buyerId';
+    final field = _authService.ispenjual ? 'penjualId' : 'pembeliId';
 
     _firestore
         .collection('chatRooms')
@@ -33,6 +33,8 @@ class ChatListController extends GetxController {
   }
 
   bool hasUnread(ChatRoomModel room) {
-    return _authService.isSeller ? !room.isReadBySeller : !room.isReadByBuyer;
+    return _authService.ispenjual
+        ? !room.isReadBypenjual
+        : !room.isReadBypembeli;
   }
 }

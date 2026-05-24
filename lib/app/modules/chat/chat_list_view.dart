@@ -22,7 +22,7 @@ class ChatListView extends StatelessWidget {
         if (controller.chatRooms.isEmpty) {
           return const EmptyStateWidget(
             title: 'Belum Ada Chat',
-            subtitle: 'Mulai chat dengan seller dari halaman produk',
+            subtitle: 'Mulai chat dengan penjual dari halaman produk',
             icon: Icons.chat_bubble_outline_rounded,
           );
         }
@@ -31,8 +31,8 @@ class ChatListView extends StatelessWidget {
           separatorBuilder: (_, __) => const Divider(height: 1, indent: 72),
           itemBuilder: (context, index) {
             final room = controller.chatRooms[index];
-            final isSeller = authService.isSeller;
-            final otherName = isSeller ? room.buyerName : room.sellerName;
+            final ispenjual = authService.ispenjual;
+            final otherName = ispenjual ? room.pembeliName : room.penjualName;
             final hasUnread = controller.hasUnread(room);
 
             return ListTile(

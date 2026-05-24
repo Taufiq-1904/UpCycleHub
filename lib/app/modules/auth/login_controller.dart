@@ -5,6 +5,7 @@ import '../../data/providers/api_client.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../services/auth_service.dart';
 import '../../routes/app_routes.dart';
+import '../../services/storage_service.dart';
 
 class LoginController extends GetxController {
   final emailController = TextEditingController();
@@ -16,19 +17,19 @@ class LoginController extends GetxController {
   // Mock users — demo offline tanpa backend
   static const _mockPassword = 'password123';
   static final _mockUsers = <String, UserModel>{
-    'buyer@demo.com': UserModel(
-      id: 'buyer_001',
+    'pembeli@demo.com': UserModel(
+      id: 'pembeli_001',
       name: 'Andi Pembeli',
-      email: 'buyer@demo.com',
-      role: 'buyer',
+      email: 'pembeli@demo.com',
+      role: 'pembeli',
       phone: '081234567890',
       address: 'Jl. Merdeka No. 10, Jakarta Pusat',
     ),
-    'seller@demo.com': UserModel(
-      id: 'seller_001',
+    'penjual@demo.com': UserModel(
+      id: 'penjual_001',
       name: 'Budi Penjual',
-      email: 'seller@demo.com',
-      role: 'seller',
+      email: 'penjual@demo.com',
+      role: 'penjual',
       phone: '089876543210',
       address: 'Jl. Sudirman No. 5, Bandung',
     ),
@@ -72,13 +73,17 @@ class LoginController extends GetxController {
 
       final token = loginResult['token']?.toString() ?? '';
       final refreshToken = loginResult['refresh_token']?.toString() ?? '';
-      final roleFromServer = loginResult['role']?.toString() ?? 'buyer';
+      final roleFromServer = loginResult['role']?.toString() ?? 'pembeli';
 
       if (token.isEmpty) throw 'Token tidak diterima dari server';
 
       // 3. Simpan token sementara supaya getProfile bisa pakai Authorization header
       final authService = Get.find<AuthService>();
       await authService.saveTokenOnly(token, refreshToken);
+      final storage = Get.find<StorageService>();
+      final savedToken = await storage.getToken();
+      print("TOKEN AFTER LOGIN => $savedToken");
+      print("LOGIN TOKEN => $token");
 
       // 4. Ambil data lengkap user via /auth/profile
       UserModel user;
@@ -120,15 +125,15 @@ class LoginController extends GetxController {
     await authService.saveUser(user, token, refreshToken: refreshToken);
 
     // ── Navigasi berdasarkan role ──────────────────────────────────────────
-    // Seller → halaman seller (dashboard + bottom nav seller)
-    // Buyer  → halaman utama buyer (home + bottom nav buyer)
-    final isSeller = user.role == 'seller';
-    Get.offAllNamed(isSeller ? AppRoutes.SELLER_MAIN : AppRoutes.MAIN);
+    // penjual → halaman penjual (dashboard + bottom nav penjual)
+    // pembeli  → halaman utama pembeli (home + bottom nav pembeli)
+    final ispenjual = user.role == 'penjual';
+    Get.offAllNamed(ispenjual ? AppRoutes.penjual_MAIN : AppRoutes.MAIN);
 
     Get.snackbar(
       'Selamat Datang! 👋',
       'Halo ${user.name.split(' ').first}! '
-          'Masuk sebagai ${isSeller ? '🏪 Penjual' : '🛍️ Pembeli'}',
+          'Masuk sebagai ${ispenjual ? '🏪 Penjual' : '🛍️ Pembeli'}',
       snackPosition: SnackPosition.TOP,
       borderRadius: 12,
       margin: const EdgeInsets.all(16),
@@ -136,9 +141,9 @@ class LoginController extends GetxController {
     );
   }
 
-  void loginDemo({String role = 'buyer'}) {
+  void loginDemo({String role = 'pembeli'}) {
     emailController.text =
-        role == 'seller' ? 'seller@demo.com' : 'buyer@demo.com';
+        role == 'penjual' ? 'penjual@demo.com' : 'pembeli@demo.com';
     passwordController.text = _mockPassword;
     login();
   }

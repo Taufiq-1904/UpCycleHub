@@ -64,7 +64,7 @@ class ReviewDummy {
           userName: 'Anisa Rahman',
           rating: 5,
           comment:
-              'Wow keren banget! Udah punya 3 tas dari toko ini. Semua kualitas oke. Seller responsif juga.',
+              'Wow keren banget! Udah punya 3 tas dari toko ini. Semua kualitas oke. penjual responsif juga.',
           createdAt: DateTime.now().subtract(const Duration(days: 15)),
         ),
       ];

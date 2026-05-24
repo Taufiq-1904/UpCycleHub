@@ -275,7 +275,7 @@ class ProductDetailView extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
 
-                      // Seller Info
+                      // penjual Info
                       const Divider(),
                       const SizedBox(height: 16),
                       Text(
@@ -298,13 +298,13 @@ class ProductDetailView extends StatelessWidget {
                               CircleAvatar(
                                 radius: 24,
                                 backgroundColor: AppTheme.softGreen,
-                                backgroundImage: product.sellerAvatar != null
+                                backgroundImage: product.penjualAvatar != null
                                     ? CachedNetworkImageProvider(
-                                        product.sellerAvatar!)
+                                        product.penjualAvatar!)
                                     : null,
-                                child: product.sellerAvatar == null
+                                child: product.penjualAvatar == null
                                     ? Text(
-                                        product.sellerName[0].toUpperCase(),
+                                        product.penjualName[0].toUpperCase(),
                                         style: const TextStyle(
                                           color: AppTheme.primaryGreen,
                                           fontWeight: FontWeight.w700,
@@ -318,7 +318,7 @@ class ProductDetailView extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      product.sellerName,
+                                      product.penjualName,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleMedium,

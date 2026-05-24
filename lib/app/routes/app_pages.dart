@@ -51,7 +51,7 @@ class AppPages {
       binding: RegisterBinding(),
     ),
 
-    // ── Buyer main (home buyer + bottom nav buyer) ─────────────────────────
+    // ── pembeli main (home pembeli + bottom nav pembeli) ─────────────────────────
     GetPage(
       name: AppRoutes.MAIN,
       page: () => const MainView(),
@@ -63,15 +63,15 @@ class AppPages {
       binding: HomeBinding(),
     ),
 
-    // ── Seller main (dashboard + bottom nav seller) ← BARU ───────────────
+    // ── penjual main (dashboard + bottom nav penjual) ← BARU ───────────────
     GetPage(
-      name: AppRoutes.SELLER_MAIN,
-      page: () => const SellerMainView(),
-      // SellerMainView menampilkan beberapa halaman sekaligus,
+      name: AppRoutes.penjual_MAIN,
+      page: () => const penjualMainView(),
+      // penjualMainView menampilkan beberapa halaman sekaligus,
       // jadi kita bind semua dependency yang dibutuhkan di sini
       bindings: [
-        SellerDashboardBinding(),
-        SellerProductBinding(),
+        penjualDashboardBinding(),
+        penjualProductBinding(),
         ChatListBinding(),
         ProfileBinding(),
       ],
@@ -123,24 +123,24 @@ class AppPages {
       binding: ProfileBinding(),
     ),
     GetPage(
-      name: AppRoutes.SELLER_DASHBOARD,
-      page: () => const SellerDashboardView(),
-      binding: SellerDashboardBinding(),
+      name: AppRoutes.penjual_DASHBOARD,
+      page: () => const penjualDashboardView(),
+      binding: penjualDashboardBinding(),
     ),
     GetPage(
-      name: AppRoutes.SELLER_PRODUCT_MANAGEMENT,
-      page: () => const SellerProductView(),
-      binding: SellerProductBinding(),
+      name: AppRoutes.penjual_PRODUCT_MANAGEMENT,
+      page: () => const penjualProductView(),
+      binding: penjualProductBinding(),
     ),
     GetPage(
-      name: AppRoutes.SELLER_ADD_PRODUCT,
-      page: () => const SellerAddProductView(),
-      binding: SellerProductBinding(),
+      name: AppRoutes.penjual_ADD_PRODUCT,
+      page: () => const penjualAddProductView(),
+      binding: penjualProductBinding(),
     ),
     GetPage(
-      name: AppRoutes.SELLER_EDIT_PRODUCT,
-      page: () => const SellerAddProductView(isEdit: true),
-      binding: SellerProductBinding(),
+      name: AppRoutes.penjual_EDIT_PRODUCT,
+      page: () => const penjualAddProductView(isEdit: true),
+      binding: penjualProductBinding(),
     ),
     GetPage(
       name: AppRoutes.CHAT_LIST,

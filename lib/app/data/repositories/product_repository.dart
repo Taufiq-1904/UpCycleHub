@@ -8,7 +8,7 @@ class ProductRepository {
 
   ProductRepository(this._apiClient);
 
-  // ── List produk aktif (buyer) ─────────────────────────────────────────
+  // ── List produk aktif (pembeli) ─────────────────────────────────────────
   Future<List<ProductModel>> getProducts({
     String? search,
     String? category,
@@ -24,7 +24,8 @@ class ProductRepository {
         'limit': limit,
         if (sort != null) 'sort': sort,
       });
-      final List data = response.data['products'] ?? response.data ?? [];
+      final raw = response.data['data'] ?? response.data['products'] ?? [];
+      final List<dynamic> data = raw is List ? raw : [];
       return data.map((e) => ProductModel.fromJson(e)).toList();
     } on DioException catch (_) {
       return ProductDummy.products;
@@ -63,7 +64,7 @@ class ProductRepository {
     }
   }
 
-  // ── Tambah produk (seller) ────────────────────────────────────────────
+  // ── Tambah produk (penjual) ────────────────────────────────────────────
   Future<ProductModel> createProduct(
     Map<String, dynamic> data,
   ) async {
@@ -90,7 +91,7 @@ class ProductRepository {
     }
   }
 
-  // ── Edit produk (seller) ──────────────────────────────────────────────
+  // ── Edit produk (penjual) ──────────────────────────────────────────────
   Future<ProductModel> updateProduct(
       String id, Map<String, dynamic> data) async {
     try {
@@ -101,7 +102,7 @@ class ProductRepository {
     }
   }
 
-  // ── Hapus produk (seller) ─────────────────────────────────────────────
+  // ── Hapus produk (penjual) ─────────────────────────────────────────────
   Future<void> deleteProduct(String id) async {
     try {
       await _apiClient.productDelete('/products/$id');
@@ -110,8 +111,8 @@ class ProductRepository {
     }
   }
 
-  // ── Produk milik seller yang sedang login ─────────────────────────────
-  Future<List<ProductModel>> getSellerProducts() async {
+  // ── Produk milik penjual yang sedang login ─────────────────────────────
+  Future<List<ProductModel>> getpenjualProducts() async {
     try {
       final response = await _apiClient.productGet('/products/penjual/me');
       final List data = response.data['products'] ?? response.data ?? [];

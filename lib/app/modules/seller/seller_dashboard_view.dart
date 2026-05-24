@@ -8,13 +8,13 @@ import '../../widgets/product_card.dart';
 import '../../widgets/state_widgets.dart';
 import '../../services/auth_service.dart';
 
-class SellerDashboardView extends StatelessWidget {
+class penjualDashboardView extends StatelessWidget {
   final bool isEmbedded;
-  const SellerDashboardView({super.key, this.isEmbedded = false});
+  const penjualDashboardView({super.key, this.isEmbedded = false});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<SellerDashboardController>();
+    final controller = Get.find<penjualDashboardController>();
     final authService = Get.find<AuthService>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -25,7 +25,7 @@ class SellerDashboardView extends StatelessWidget {
         automaticallyImplyLeading: !isEmbedded,
         actions: [
           IconButton(
-            onPressed: () => Get.toNamed(AppRoutes.SELLER_ADD_PRODUCT),
+            onPressed: () => Get.toNamed(AppRoutes.penjual_ADD_PRODUCT),
             icon: const Icon(Icons.add_circle_outline_rounded),
             tooltip: 'Tambah Produk',
           ),
@@ -135,7 +135,7 @@ class SellerDashboardView extends StatelessWidget {
                         icon: Icons.add_box_outlined,
                         label: 'Tambah Produk',
                         color: AppTheme.primaryGreen,
-                        onTap: () => Get.toNamed(AppRoutes.SELLER_ADD_PRODUCT),
+                        onTap: () => Get.toNamed(AppRoutes.penjual_ADD_PRODUCT),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -146,7 +146,7 @@ class SellerDashboardView extends StatelessWidget {
                         label: 'Kelola Produk',
                         color: AppTheme.infoBlue,
                         onTap: () =>
-                            Get.toNamed(AppRoutes.SELLER_PRODUCT_MANAGEMENT),
+                            Get.toNamed(AppRoutes.penjual_PRODUCT_MANAGEMENT),
                       ),
                     ),
                   ],
@@ -161,7 +161,7 @@ class SellerDashboardView extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleLarge),
                     TextButton(
                       onPressed: () =>
-                          Get.toNamed(AppRoutes.SELLER_PRODUCT_MANAGEMENT),
+                          Get.toNamed(AppRoutes.penjual_PRODUCT_MANAGEMENT),
                       child: const Text('Lihat Semua'),
                     ),
                   ],
@@ -174,7 +174,7 @@ class SellerDashboardView extends StatelessWidget {
                         icon: Icons.add_box_outlined,
                         buttonText: 'Tambah Produk',
                         onButtonPressed: () =>
-                            Get.toNamed(AppRoutes.SELLER_ADD_PRODUCT),
+                            Get.toNamed(AppRoutes.penjual_ADD_PRODUCT),
                       )
                     : GridView.builder(
                         shrinkWrap: true,

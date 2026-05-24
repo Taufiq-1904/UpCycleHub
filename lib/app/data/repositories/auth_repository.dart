@@ -22,6 +22,8 @@ class AuthRepository {
         },
       );
 
+      print("LOGIN RESPONSE => ${response.data}");
+
       return {
         'token': response.data['token'],
         'refresh_token': response.data['refresh_token'],
@@ -39,9 +41,17 @@ class AuthRepository {
     required String name,
     required String email,
     required String password,
-    String role = 'buyer',
+    String role = 'pembeli',
   }) async {
     try {
+      print('REGISTER REQUEST =>');
+      print({
+        'name': name,
+        'email': email,
+        'password': password,
+        'role': role,
+      });
+
       final response = await _apiClient.post(
         '/auth/register',
         data: {
@@ -51,6 +61,8 @@ class AuthRepository {
           'role': role,
         },
       );
+
+      print('REGISTER RESPONSE => ${response.data}');
 
       return response.data;
     } on DioException catch (e) {

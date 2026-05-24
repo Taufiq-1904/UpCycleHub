@@ -6,9 +6,9 @@ class ProductModel {
   final double price;
   final int stock;
   final List<String> images;
-  final String sellerId;
-  final String sellerName;
-  final String? sellerAvatar;
+  final String penjualId;
+  final String penjualName;
+  final String? penjualAvatar;
   final String verificationStatus;
   final double rating;
   final int reviewCount;
@@ -23,9 +23,9 @@ class ProductModel {
     required this.price,
     required this.stock,
     required this.images,
-    required this.sellerId,
-    required this.sellerName,
-    this.sellerAvatar,
+    required this.penjualId,
+    required this.penjualName,
+    this.penjualAvatar,
     this.verificationStatus = 'pending',
     this.rating = 0,
     this.reviewCount = 0,
@@ -47,9 +47,9 @@ class ProductModel {
       images: List<String>.from(
         json['fotos'] ?? json['images'] ?? [],
       ),
-      sellerId: json['seller']?['_id'] ?? json['sellerId'] ?? '',
-      sellerName: json['seller']?['name'] ?? json['sellerName'] ?? '',
-      sellerAvatar: json['seller']?['avatar'] ?? json['sellerAvatar'],
+      penjualId: json['penjual']?['_id'] ?? json['penjualId'] ?? '',
+      penjualName: json['penjual']?['name'] ?? json['penjualName'] ?? '',
+      penjualAvatar: json['penjual']?['avatar'] ?? json['penjualAvatar'],
       verificationStatus: json['verificationStatus'] ?? 'pending',
       rating: (json['rating'] ?? 0).toDouble(),
       reviewCount: json['reviewCount'] ?? 0,
@@ -68,8 +68,8 @@ class ProductModel {
         'price': price,
         'stock': stock,
         'images': images,
-        'sellerId': sellerId,
-        'sellerName': sellerName,
+        'penjualId': penjualId,
+        'penjualName': penjualName,
         'verificationStatus': verificationStatus,
         'rating': rating,
         'reviewCount': reviewCount,
@@ -96,8 +96,8 @@ class ProductDummy {
             'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400',
             'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400',
           ],
-          sellerId: 's1',
-          sellerName: 'EcoStyle Studio',
+          penjualId: 's1',
+          penjualName: 'EcoStyle Studio',
           verificationStatus: 'approved',
           rating: 4.8,
           reviewCount: 124,
@@ -114,8 +114,8 @@ class ProductDummy {
           images: [
             'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400',
           ],
-          sellerId: 's2',
-          sellerName: 'GreenCraft ID',
+          penjualId: 's2',
+          penjualName: 'GreenCraft ID',
           verificationStatus: 'approved',
           rating: 4.6,
           reviewCount: 67,
@@ -132,8 +132,8 @@ class ProductDummy {
           images: [
             'https://images.unsplash.com/photo-1466781783364-36c955e42a7f?w=400',
           ],
-          sellerId: 's1',
-          sellerName: 'EcoStyle Studio',
+          penjualId: 's1',
+          penjualName: 'EcoStyle Studio',
           verificationStatus: 'approved',
           rating: 4.4,
           reviewCount: 38,
@@ -150,8 +150,8 @@ class ProductDummy {
           images: [
             'https://images.unsplash.com/photo-1627123424574-724758594e93?w=400',
           ],
-          sellerId: 's3',
-          sellerName: 'Batik Recycle Co',
+          penjualId: 's3',
+          penjualName: 'Batik Recycle Co',
           verificationStatus: 'approved',
           rating: 4.7,
           reviewCount: 92,
@@ -168,8 +168,8 @@ class ProductDummy {
           images: [
             'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400',
           ],
-          sellerId: 's2',
-          sellerName: 'GreenCraft ID',
+          penjualId: 's2',
+          penjualName: 'GreenCraft ID',
           verificationStatus: 'approved',
           rating: 4.9,
           reviewCount: 15,
@@ -186,8 +186,8 @@ class ProductDummy {
           images: [
             'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400',
           ],
-          sellerId: 's3',
-          sellerName: 'Batik Recycle Co',
+          penjualId: 's3',
+          penjualName: 'Batik Recycle Co',
           verificationStatus: 'approved',
           rating: 4.3,
           reviewCount: 54,

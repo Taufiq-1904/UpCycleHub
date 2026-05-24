@@ -15,7 +15,7 @@ class RegisterController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool obscurePassword = true.obs;
   final RxBool obscureConfirm = true.obs;
-  final RxString selectedRole = 'buyer'.obs;
+  final RxString selectedRole = 'pembeli'.obs;
 
   late final AuthRepository _authRepo;
 
@@ -41,11 +41,13 @@ class RegisterController extends GetxController {
     isLoading.value = true;
     try {
       // Step 1: Register — kirim role ke backend supaya tersimpan benar
+      final apiRole = selectedRole.value == 'penjual' ? 'penjual' : 'pembeli';
+
       await _authRepo.register(
         name: nameController.text.trim(),
         email: emailController.text.trim(),
         password: passwordController.text,
-        role: selectedRole.value, // ← PENTING: kirim role ke API
+        role: apiRole,
       );
 
       // Step 2: Langsung login pakai kredensial yang baru didaftarkan
@@ -83,8 +85,8 @@ class RegisterController extends GetxController {
       await authService.saveUser(user, token, refreshToken: refreshToken);
 
       // ── Navigasi berdasarkan role ──────────────────────────────────────
-      final isSeller = user.role == 'seller';
-      Get.offAllNamed(isSeller ? AppRoutes.SELLER_MAIN : AppRoutes.MAIN);
+      final ispenjual = user.role == 'penjual';
+      Get.offAllNamed(ispenjual ? AppRoutes.penjual_MAIN : AppRoutes.MAIN);
 
       Get.snackbar(
         'Selamat Datang! 🎉',

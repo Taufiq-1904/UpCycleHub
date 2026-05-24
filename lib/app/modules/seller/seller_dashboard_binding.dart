@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'seller_dashboard_controller.dart';
 
-class SellerDashboardBinding extends Bindings {
+class penjualDashboardBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => SellerDashboardController());
+    Get.lazyPut(() => penjualDashboardController());
   }
 }

@@ -3,7 +3,7 @@ import '../../data/models/product_model.dart';
 import '../../data/repositories/product_repository.dart';
 import '../../data/providers/api_client.dart';
 
-class SellerDashboardController extends GetxController {
+class penjualDashboardController extends GetxController {
   final RxList<ProductModel> products = <ProductModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxInt totalProducts = 0.obs;
@@ -22,7 +22,7 @@ class SellerDashboardController extends GetxController {
   Future<void> loadDashboard() async {
     isLoading.value = true;
     try {
-      products.value = await _repo.getSellerProducts();
+      products.value = await _repo.getpenjualProducts();
       totalProducts.value = products.length;
       approvedProducts.value =
           products.where((p) => p.verificationStatus == 'approved').length;

@@ -50,15 +50,17 @@ class RegisterView extends StatelessWidget {
                         _RoleCard(
                           label: 'Pembeli',
                           icon: Icons.shopping_bag_outlined,
-                          isSelected: controller.selectedRole.value == 'buyer',
-                          onTap: () => controller.setRole('buyer'),
+                          isSelected:
+                              controller.selectedRole.value == 'pembeli',
+                          onTap: () => controller.setRole('pembeli'),
                         ),
                         const SizedBox(width: 12),
                         _RoleCard(
                           label: 'Penjual',
                           icon: Icons.storefront_outlined,
-                          isSelected: controller.selectedRole.value == 'seller',
-                          onTap: () => controller.setRole('seller'),
+                          isSelected:
+                              controller.selectedRole.value == 'penjual',
+                          onTap: () => controller.setRole('penjual'),
                         ),
                       ],
                     )),

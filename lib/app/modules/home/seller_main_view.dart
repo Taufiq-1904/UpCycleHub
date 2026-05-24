@@ -5,20 +5,20 @@ import '../seller/seller_product_view.dart';
 import '../chat/chat_list_view.dart';
 import '../profile/profile_view.dart';
 
-class SellerMainView extends StatefulWidget {
-  const SellerMainView({super.key});
+class penjualMainView extends StatefulWidget {
+  const penjualMainView({super.key});
 
   @override
-  State<SellerMainView> createState() => _SellerMainViewState();
+  State<penjualMainView> createState() => _penjualMainViewState();
 }
 
-class _SellerMainViewState extends State<SellerMainView> {
+class _penjualMainViewState extends State<penjualMainView> {
   int _currentIndex = 0;
 
   // isEmbedded: true → sembunyikan back button, karena ini tab bukan halaman terpisah
   final List<Widget> _pages = const [
-    SellerDashboardView(isEmbedded: true),
-    SellerProductView(isEmbedded: true), // ← back button disembunyikan
+    penjualDashboardView(isEmbedded: true),
+    penjualProductView(isEmbedded: true), // ← back button disembunyikan
     ChatListView(),
     ProfileView(),
   ];

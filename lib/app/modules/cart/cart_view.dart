@@ -110,7 +110,7 @@ class CartView extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                item.sellerName,
+                                item.penjualName,
                                 style: const TextStyle(
                                     fontSize: 11, color: AppTheme.grey400),
                               ),

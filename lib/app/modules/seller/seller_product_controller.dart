@@ -9,7 +9,7 @@ import '../../services/cloudinary_service.dart';
 import '../../themes/app_theme.dart';
 import 'dart:io';
 
-class SellerProductController extends GetxController {
+class penjualProductController extends GetxController {
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final priceController = TextEditingController();
@@ -95,7 +95,7 @@ class SellerProductController extends GetxController {
   Future<void> loadProducts() async {
     isLoading.value = true;
     try {
-      products.value = await _repo.getSellerProducts();
+      products.value = await _repo.getpenjualProducts();
     } finally {
       isLoading.value = false;
     }

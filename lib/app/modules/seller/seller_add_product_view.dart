@@ -6,13 +6,13 @@ import '../../themes/app_theme.dart';
 import '../../utils/app_utils.dart';
 import '../../widgets/app_button.dart';
 
-class SellerAddProductView extends StatelessWidget {
+class penjualAddProductView extends StatelessWidget {
   final bool isEdit;
-  const SellerAddProductView({super.key, this.isEdit = false});
+  const penjualAddProductView({super.key, this.isEdit = false});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<SellerProductController>();
+    final controller = Get.find<penjualProductController>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(

@@ -2,68 +2,68 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatRoomModel {
   final String id;
-  final String buyerId;
-  final String buyerName;
-  final String? buyerAvatar;
-  final String sellerId;
-  final String sellerName;
-  final String? sellerAvatar;
+  final String pembeliId;
+  final String pembeliName;
+  final String? pembeliAvatar;
+  final String penjualId;
+  final String penjualName;
+  final String? penjualAvatar;
   final String productId;
   final String productName;
   final String lastMessage;
   final DateTime lastMessageTime;
-  final bool isReadByBuyer;
-  final bool isReadBySeller;
+  final bool isReadBypembeli;
+  final bool isReadBypenjual;
 
   ChatRoomModel({
     required this.id,
-    required this.buyerId,
-    required this.buyerName,
-    this.buyerAvatar,
-    required this.sellerId,
-    required this.sellerName,
-    this.sellerAvatar,
+    required this.pembeliId,
+    required this.pembeliName,
+    this.pembeliAvatar,
+    required this.penjualId,
+    required this.penjualName,
+    this.penjualAvatar,
     required this.productId,
     required this.productName,
     required this.lastMessage,
     required this.lastMessageTime,
-    required this.isReadByBuyer,
-    required this.isReadBySeller,
+    required this.isReadBypembeli,
+    required this.isReadBypenjual,
   });
 
   factory ChatRoomModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return ChatRoomModel(
       id: doc.id,
-      buyerId: data['buyerId'] ?? '',
-      buyerName: data['buyerName'] ?? '',
-      buyerAvatar: data['buyerAvatar'],
-      sellerId: data['sellerId'] ?? '',
-      sellerName: data['sellerName'] ?? '',
-      sellerAvatar: data['sellerAvatar'],
+      pembeliId: data['pembeliId'] ?? '',
+      pembeliName: data['pembeliName'] ?? '',
+      pembeliAvatar: data['pembeliAvatar'],
+      penjualId: data['penjualId'] ?? '',
+      penjualName: data['penjualName'] ?? '',
+      penjualAvatar: data['penjualAvatar'],
       productId: data['productId'] ?? '',
       productName: data['productName'] ?? '',
       lastMessage: data['lastMessage'] ?? '',
       lastMessageTime:
           (data['lastMessageTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      isReadByBuyer: data['isReadByBuyer'] ?? true,
-      isReadBySeller: data['isReadBySeller'] ?? true,
+      isReadBypembeli: data['isReadBypembeli'] ?? true,
+      isReadBypenjual: data['isReadBypenjual'] ?? true,
     );
   }
 
   Map<String, dynamic> toMap() => {
-        'buyerId': buyerId,
-        'buyerName': buyerName,
-        'buyerAvatar': buyerAvatar,
-        'sellerId': sellerId,
-        'sellerName': sellerName,
-        'sellerAvatar': sellerAvatar,
+        'pembeliId': pembeliId,
+        'pembeliName': pembeliName,
+        'pembeliAvatar': pembeliAvatar,
+        'penjualId': penjualId,
+        'penjualName': penjualName,
+        'penjualAvatar': penjualAvatar,
         'productId': productId,
         'productName': productName,
         'lastMessage': lastMessage,
         'lastMessageTime': Timestamp.fromDate(lastMessageTime),
-        'isReadByBuyer': isReadByBuyer,
-        'isReadBySeller': isReadBySeller,
+        'isReadBypembeli': isReadBypembeli,
+        'isReadBypenjual': isReadBypenjual,
       };
 }
 

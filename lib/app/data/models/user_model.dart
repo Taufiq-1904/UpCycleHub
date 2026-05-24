@@ -26,13 +26,13 @@ class UserModel {
       id: (json['id'] ?? json['_id'] ?? '').toString(),
       name: (json['name'] ?? json['nama'] ?? '').toString(),
       email: (json['email'] ?? '').toString(),
-      role: (json['role'] ?? 'buyer').toString(),
+      role: (json['role'] ?? 'pembeli').toString(),
       avatar: json['avatar']?.toString() ?? json['foto']?.toString(),
       phone: json['phone']?.toString() ?? json['telepon']?.toString(),
       address: json['address']?.toString() ?? json['alamat']?.toString(),
       createdAt: json['createdAt'] != null
           ? DateTime.tryParse(json['createdAt'].toString())
-          : json['created_at'] != null  // MySQL biasanya pakai snake_case
+          : json['created_at'] != null // MySQL biasanya pakai snake_case
               ? DateTime.tryParse(json['created_at'].toString())
               : null,
     );

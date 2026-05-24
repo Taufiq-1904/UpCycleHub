@@ -7,8 +7,8 @@ class CartItemModel {
   final double price;
   int quantity;
   final int maxStock;
-  final String sellerId;
-  final String sellerName;
+  final String penjualId;
+  final String penjualName;
 
   CartItemModel({
     required this.productId,
@@ -17,8 +17,8 @@ class CartItemModel {
     required this.price,
     required this.quantity,
     required this.maxStock,
-    required this.sellerId,
-    required this.sellerName,
+    required this.penjualId,
+    required this.penjualName,
   });
 
   double get subtotal => price * quantity;
@@ -31,8 +31,8 @@ class CartItemModel {
       price: product.price,
       quantity: quantity,
       maxStock: product.stock,
-      sellerId: product.sellerId,
-      sellerName: product.sellerName,
+      penjualId: product.penjualId,
+      penjualName: product.penjualName,
     );
   }
 
