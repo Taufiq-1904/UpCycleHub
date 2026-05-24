@@ -9,8 +9,8 @@ class ReviewRepository {
 
   Future<List<ReviewModel>> getReviews(String productId) async {
     try {
-      final response = await _apiClient.get('/reviews/$productId');
-      final List data = response.data['reviews'] ?? [];
+      final response = await _apiClient.productGet('/verifikasi/review/$productId');
+      final List data = response.data['reviews'] ?? response.data ?? [];
       return data.map((e) => ReviewModel.fromJson(e)).toList();
     } on DioException catch (_) {
       return ReviewDummy.reviews;
@@ -23,12 +23,14 @@ class ReviewRepository {
     required String comment,
   }) async {
     try {
-      final response = await _apiClient.post('/reviews', data: {
-        'productId': productId,
-        'rating': rating,
-        'comment': comment,
-      });
-      return ReviewModel.fromJson(response.data['review']);
+      final response = await _apiClient.productPost(
+        '/verifikasi/review/$productId',
+        data: {
+          'rating': rating,
+          'comment': comment,
+        },
+      );
+      return ReviewModel.fromJson(response.data['review'] ?? response.data);
     } on DioException catch (e) {
       throw e.response?.data['message'] ?? 'Gagal menambah review';
     }

@@ -34,7 +34,7 @@ class SellerAddProductView extends StatelessWidget {
               _label(context, 'Foto Produk'),
               const SizedBox(height: 4),
               Text(
-                'Foto diupload ke Firebase Storage, URL disimpan di backend',
+                'Foto diupload ke Cloudinary Storage, URL disimpan di backend',
                 style: TextStyle(
                     fontSize: 11,
                     color: AppTheme.grey400,
@@ -309,7 +309,7 @@ class SellerAddProductView extends StatelessWidget {
                         ),
                         SizedBox(width: 12),
                         Text(
-                          'Mengupload foto ke Firebase...',
+                          'Mengupload foto ke Cloudinary...',
                           style: TextStyle(
                             color: AppTheme.primaryGreen,
                             fontWeight: FontWeight.w600,

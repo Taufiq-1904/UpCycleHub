@@ -209,7 +209,7 @@ class ProfileView extends StatelessWidget {
                     trailing: Switch(
                       value: storageService.isDarkMode,
                       onChanged: (_) => controller.toggleDarkMode(),
-                      activeThumbColor: AppTheme.primaryGreen,
+                      activeColor: AppTheme.primaryGreen,
                     ),
                   ),
                 ],

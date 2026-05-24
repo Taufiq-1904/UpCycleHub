@@ -65,10 +65,10 @@ class LoginView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(color: AppTheme.accentGreen),
                   ),
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
+                      const Row(
                         children: [
                           Icon(Icons.info_outline_rounded,
                               size: 16, color: AppTheme.primaryGreen),
@@ -80,7 +80,7 @@ class LoginView extends StatelessWidget {
                                   fontSize: 13)),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       _DemoRow(
                         icon: Icons.shopping_bag_outlined,
                         label: 'Pembeli',
@@ -88,7 +88,7 @@ class LoginView extends StatelessWidget {
                         description:
                             'Browsing, cart, checkout, chat dengan seller',
                       ),
-                      SizedBox(height: 6),
+                      const SizedBox(height: 6),
                       _DemoRow(
                         icon: Icons.storefront_outlined,
                         label: 'Penjual',
@@ -96,8 +96,8 @@ class LoginView extends StatelessWidget {
                         description:
                             'Dashboard, tambah/edit produk, kelola toko',
                       ),
-                      SizedBox(height: 4),
-                      Text(
+                      const SizedBox(height: 4),
+                      const Text(
                         'Password keduanya: password123',
                         style: TextStyle(
                             fontSize: 11,

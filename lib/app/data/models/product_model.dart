@@ -36,12 +36,17 @@ class ProductModel {
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
       id: json['_id'] ?? json['id'] ?? '',
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      category: json['category'] ?? '',
-      price: (json['price'] ?? 0).toDouble(),
-      stock: json['stock'] ?? 0,
-      images: List<String>.from(json['images'] ?? []),
+      name: json['name'] ?? json['nama'] ?? '',
+      description: json['description'] ?? json['deskripsi'] ?? '',
+      category: json['category'] ?? json['kategori'] ?? '',
+      price: double.tryParse(
+            json['harga']?.toString() ?? json['price']?.toString() ?? '0',
+          ) ??
+          0,
+      stock: json['stok'] ?? json['stock'] ?? 0,
+      images: List<String>.from(
+        json['fotos'] ?? json['images'] ?? [],
+      ),
       sellerId: json['seller']?['_id'] ?? json['sellerId'] ?? '',
       sellerName: json['seller']?['name'] ?? json['sellerName'] ?? '',
       sellerAvatar: json['seller']?['avatar'] ?? json['sellerAvatar'],

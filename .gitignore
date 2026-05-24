@@ -52,6 +52,7 @@ firebase_options.dart
 # Environment
 .env
 .env.*
+.env.production
 
 # Generated Flutter
 .flutter-plugins

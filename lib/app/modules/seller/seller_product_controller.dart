@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import '../../data/models/product_model.dart';
 import '../../data/models/kategori_model.dart';
 import '../../data/repositories/product_repository.dart';
 import '../../data/providers/api_client.dart';
+import '../../services/cloudinary_service.dart';
 import '../../themes/app_theme.dart';
 import 'dart:io';
 
@@ -17,12 +17,7 @@ class SellerProductController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
   final RxList<ProductModel> products = <ProductModel>[].obs;
-
-  // Foto BARU yang dipilih user (File lokal, belum di-upload)
   final RxList<File> selectedImages = <File>[].obs;
-
-  // Foto LAMA dari produk yang sedang diedit (sudah berupa URL Firebase)
-  // User bisa hapus satu per satu. Yang tersisa tetap dikirim ke backend.
   final RxList<String> existingImageUrls = <String>[].obs;
 
   final Rxn<KategoriModel> selectedCategory = Rxn<KategoriModel>();
@@ -34,6 +29,7 @@ class SellerProductController extends GetxController {
 
   Rxn<ProductModel> editingProduct = Rxn<ProductModel>();
   late final ProductRepository _repo;
+  final _cloudinary = CloudinaryService();
 
   @override
   void onInit() {
@@ -64,9 +60,6 @@ class SellerProductController extends GetxController {
     descriptionController.text = p.description;
     priceController.text = p.price.toStringAsFixed(0);
     stockController.text = p.stock.toString();
-
-    // ✅ Load URL foto lama dari produk ke existingImageUrls
-    // ProductModel.images harus berupa List<String> URL
     existingImageUrls.value = List<String>.from(p.images);
   }
 
@@ -76,8 +69,6 @@ class SellerProductController extends GetxController {
       categories.value = list;
 
       if (editingProduct.value != null) {
-        // Mode edit: cocokkan kategori berdasarkan categoryId dulu, fallback nama
-        // ProductModel may not have numeric categoryId; match by name first
         try {
           selectedCategory.value = list.firstWhere(
             (k) =>
@@ -91,7 +82,6 @@ class SellerProductController extends GetxController {
         selectedCategory.value = null;
       }
     } catch (_) {
-      // Fallback hardcode sesuai upcycle_products.sql
       categories.value = const [
         KategoriModel(id: 1, nama: 'Fesyen', slug: 'fesyen'),
         KategoriModel(id: 2, nama: 'Furnitur', slug: 'furnitur'),
@@ -111,7 +101,6 @@ class SellerProductController extends GetxController {
     }
   }
 
-  // ── Pilih foto baru dari galeri ─────────────────────────────────────────
   Future<void> pickImages() async {
     final picker = ImagePicker();
     final picked = await picker.pickMultiImage(imageQuality: 80);
@@ -120,34 +109,23 @@ class SellerProductController extends GetxController {
     }
   }
 
-  // Hapus foto BARU (File lokal) yang belum diupload
   void removeNewImage(int index) => selectedImages.removeAt(index);
-
-  // Alias untuk View yang memanggil removeImage() pada foto baru
   void removeImage(int index) => removeNewImage(index);
-
-  // ✅ Hapus foto LAMA (URL) dari daftar — tidak dihapus dari Firebase
-  // sampai user benar-benar simpan produk (supaya bisa cancel)
   void removeExistingImage(int index) => existingImageUrls.removeAt(index);
 
-  // ── Upload foto BARU ke Firebase Storage ────────────────────────────────
+  // ── Upload foto BARU ke Cloudinary ──────────────────────────────────────
   Future<List<String>> _uploadNewImages() async {
     if (selectedImages.isEmpty) return [];
 
     isUploadingImages.value = true;
     final List<String> urls = [];
     try {
-      for (int i = 0; i < selectedImages.length; i++) {
-        final filename =
-            'produk_${DateTime.now().millisecondsSinceEpoch}_$i.jpg';
-        final ref =
-            FirebaseStorage.instance.ref().child('products').child(filename);
-        final task = await ref.putFile(
-          selectedImages[i],
-          SettableMetadata(contentType: 'image/jpeg'),
-        );
-        urls.add(await task.ref.getDownloadURL());
+      for (final file in selectedImages) {
+        final url = await _cloudinary.uploadImage(file);
+        urls.add(url);
       }
+    } catch (e) {
+      throw 'Gagal upload foto: $e';
     } finally {
       isUploadingImages.value = false;
     }
@@ -168,7 +146,6 @@ class SellerProductController extends GetxController {
       return;
     }
 
-    // Minimal harus ada 1 foto (baru atau lama)
     if (selectedImages.isEmpty && existingImageUrls.isEmpty) {
       Get.snackbar(
         'Perhatian',
@@ -182,21 +159,16 @@ class SellerProductController extends GetxController {
 
     isSaving.value = true;
     try {
-      // Step 1: Upload foto BARU → dapat URL baru
       final newUrls = await _uploadNewImages();
-
-      // Step 2: Gabungkan URL lama (yang belum dihapus) + URL baru
-      // ✅ Ini yang fix bug edit mode: foto lama tidak hilang
       final allImageUrls = [...existingImageUrls, ...newUrls];
 
-      // Step 3: Kirim ke backend — field sesuai kolom database MySQL
       final body = <String, dynamic>{
         'nama': nameController.text.trim(),
         'deskripsi': descriptionController.text.trim(),
         'kategori_id': selectedCategory.value!.id,
         'harga': double.tryParse(priceController.text) ?? 0,
         'stok': int.tryParse(stockController.text) ?? 0,
-        'images': allImageUrls, // URL Firebase — backend simpan ke Firestore
+        'fotos': allImageUrls,
       };
 
       if (editingProduct.value != null) {
@@ -215,15 +187,17 @@ class SellerProductController extends GetxController {
 
       Get.back();
       await loadProducts();
-    } catch (e) {
+    } catch (e, s) {
+      print("ERROR => $e");
+      print("STACKTRACE =>");
+      print(s);
+
       Get.snackbar(
         'Gagal Menyimpan',
         e.toString(),
         backgroundColor: AppTheme.errorRed,
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
-        borderRadius: 12,
-        margin: const EdgeInsets.all(16),
       );
     } finally {
       isSaving.value = false;

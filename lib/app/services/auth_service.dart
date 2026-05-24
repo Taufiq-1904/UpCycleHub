@@ -28,8 +28,18 @@ class AuthService extends GetxService {
 
   /// Simpan token saja (sebelum getProfile dipanggil)
   /// Dipakai saat login/register: token ada duluan, user belum
-  Future<void> saveTokenOnly(String token, String? refreshToken) async {
+  Future<void> saveTokenOnly(
+    String token,
+    String? refreshToken,
+  ) async {
+    print("SAVE TOKEN => $token");
+
     await _storageService.saveToken(token);
+
+    final check = await _storageService.getToken();
+
+    print("TOKEN AFTER SAVE => $check");
+
     if (refreshToken != null && refreshToken.isNotEmpty) {
       await _storageService.saveRefreshToken(refreshToken);
     }

@@ -26,7 +26,9 @@ class StorageService extends GetxService {
   }
 
   Future<String?> getToken() async {
-    return await _secureStorage.read(key: _tokenKey);
+    final token = await _secureStorage.read(key: _tokenKey);
+    print("READ TOKEN => $token");
+    return token;
   }
 
   Future<void> deleteToken() async {

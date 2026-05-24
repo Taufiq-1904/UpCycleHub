@@ -9,8 +9,8 @@ class OrderRepository {
 
   Future<OrderModel> createOrder(Map<String, dynamic> data) async {
     try {
-      final response = await _apiClient.post('/orders', data: data);
-      return OrderModel.fromJson(response.data['order']);
+      final response = await _apiClient.productPost('/transaksi', data: data);
+      return OrderModel.fromJson(response.data['order'] ?? response.data);
     } on DioException catch (e) {
       throw _handleError(e);
     }
@@ -18,8 +18,8 @@ class OrderRepository {
 
   Future<List<OrderModel>> getOrders() async {
     try {
-      final response = await _apiClient.get('/orders');
-      final List data = response.data['orders'] ?? [];
+      final response = await _apiClient.productGet('/transaksi/me');
+      final List data = response.data['orders'] ?? response.data ?? [];
       return data.map((e) => OrderModel.fromJson(e)).toList();
     } on DioException catch (_) {
       return OrderDummy.orders;
@@ -28,21 +28,20 @@ class OrderRepository {
 
   Future<OrderModel> getOrderById(String id) async {
     try {
-      final response = await _apiClient.get('/orders/$id');
-      return OrderModel.fromJson(response.data['order']);
+      final response = await _apiClient.productGet('/transaksi/$id');
+      return OrderModel.fromJson(response.data['order'] ?? response.data);
     } on DioException catch (_) {
       return OrderDummy.orders.first;
     }
   }
 
-  Future<OrderModel> uploadPaymentProof(
-      String orderId, FormData formData) async {
+  Future<OrderModel> uploadPaymentProof(String orderId, FormData formData) async {
     try {
-      final response = await _apiClient.postFormData(
-        '/orders/$orderId/payment-proof',
+      final response = await _apiClient.productPostFormData(
+        '/transaksi/$orderId/payment-proof',
         formData,
       );
-      return OrderModel.fromJson(response.data['order']);
+      return OrderModel.fromJson(response.data['order'] ?? response.data);
     } on DioException catch (e) {
       throw _handleError(e);
     }
