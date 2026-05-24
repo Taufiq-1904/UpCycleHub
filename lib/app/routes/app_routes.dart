@@ -2,6 +2,8 @@ abstract class AppRoutes {
   static const SPLASH = '/splash';
   static const LOGIN = '/login';
   static const REGISTER = '/register';
+  static const MAIN = '/main';
+  static const SELLER_MAIN = '/seller-main';
   static const HOME = '/home';
   static const PRODUCT_LIST = '/products';
   static const PRODUCT_DETAIL = '/product-detail';
@@ -20,5 +22,4 @@ abstract class AppRoutes {
   static const CHAT_ROOM = '/chat-room';
   static const NOTIFICATION = '/notifications';
   static const SEARCH = '/search';
-  static const MAIN = '/main';
 }

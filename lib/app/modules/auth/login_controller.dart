@@ -118,11 +118,17 @@ class LoginController extends GetxController {
   }) async {
     final authService = Get.find<AuthService>();
     await authService.saveUser(user, token, refreshToken: refreshToken);
-    Get.offAllNamed(AppRoutes.MAIN);
+
+    // ── Navigasi berdasarkan role ──────────────────────────────────────────
+    // Seller → halaman seller (dashboard + bottom nav seller)
+    // Buyer  → halaman utama buyer (home + bottom nav buyer)
+    final isSeller = user.role == 'seller';
+    Get.offAllNamed(isSeller ? AppRoutes.SELLER_MAIN : AppRoutes.MAIN);
+
     Get.snackbar(
       'Selamat Datang! 👋',
       'Halo ${user.name.split(' ').first}! '
-          'Masuk sebagai ${user.role == 'seller' ? '🏪 Penjual' : '🛍️ Pembeli'}',
+          'Masuk sebagai ${isSeller ? '🏪 Penjual' : '🛍️ Pembeli'}',
       snackPosition: SnackPosition.TOP,
       borderRadius: 12,
       margin: const EdgeInsets.all(16),

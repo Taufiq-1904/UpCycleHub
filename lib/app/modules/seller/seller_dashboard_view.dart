@@ -21,6 +21,8 @@ class SellerDashboardView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard Penjual'),
+        // Saat embedded sebagai tab, tidak perlu back button otomatis
+        automaticallyImplyLeading: !isEmbedded,
         actions: [
           IconButton(
             onPressed: () => Get.toNamed(AppRoutes.SELLER_ADD_PRODUCT),

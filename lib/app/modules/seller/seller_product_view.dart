@@ -8,7 +8,10 @@ import '../../widgets/state_widgets.dart';
 import '../../routes/app_routes.dart';
 
 class SellerProductView extends StatelessWidget {
-  const SellerProductView({super.key});
+  /// true  → dipakai sebagai tab di SellerMainView (tidak ada back button)
+  /// false → dibuka sebagai halaman standalone (ada back button)
+  final bool isEmbedded;
+  const SellerProductView({super.key, this.isEmbedded = false});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +21,14 @@ class SellerProductView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kelola Produk'),
-        leading: IconButton(
-            onPressed: Get.back,
-            icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+        // Sembunyikan back button kalau sedang dipakai sebagai tab
+        automaticallyImplyLeading: !isEmbedded,
+        leading: isEmbedded
+            ? null
+            : IconButton(
+                onPressed: Get.back,
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+              ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Get.toNamed(AppRoutes.SELLER_ADD_PRODUCT),

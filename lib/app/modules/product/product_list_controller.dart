@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../data/models/product_model.dart';
+import '../../data/models/kategori_model.dart';
 import '../../data/repositories/product_repository.dart';
 import '../../data/providers/api_client.dart';
 
@@ -9,8 +10,13 @@ class ProductListController extends GetxController {
   final scrollController = ScrollController();
 
   final RxList<ProductModel> products = <ProductModel>[].obs;
-  final RxList<String> categories = <String>[].obs;
-  final RxString selectedCategory = ''.obs;
+
+  // ✅ Ganti RxList<String> → RxList<KategoriModel>
+  final RxList<KategoriModel> categories = <KategoriModel>[].obs;
+
+  // ✅ Ganti RxString → Rxn<KategoriModel> (null = semua kategori)
+  final Rxn<KategoriModel> selectedCategory = Rxn<KategoriModel>();
+
   final RxString searchQuery = ''.obs;
   final RxBool isLoading = false.obs;
   final RxBool isLoadingMore = false.obs;
@@ -25,10 +31,10 @@ class ProductListController extends GetxController {
     super.onInit();
     _repo = ProductRepository(ApiClient());
 
-    // Pre-set category from args
+    // Args dari home_view sekarang berisi KategoriModel (bukan String)
     final args = Get.arguments as Map<String, dynamic>?;
-    if (args != null && args['category'] != null) {
-      selectedCategory.value = args['category'];
+    if (args != null && args['category'] is KategoriModel) {
+      selectedCategory.value = args['category'] as KategoriModel;
     }
 
     scrollController.addListener(_onScroll);
@@ -62,8 +68,9 @@ class ProductListController extends GetxController {
     }
     try {
       final result = await _repo.getProducts(
-        search: searchQuery.value,
-        category: selectedCategory.value,
+        search: searchQuery.value.isEmpty ? null : searchQuery.value,
+        // Kirim slug ke query param — backend pakai slug sebagai filter kategori
+        category: selectedCategory.value?.slug,
         page: _page,
         limit: _limit,
       );
@@ -94,12 +101,18 @@ class ProductListController extends GetxController {
     loadProducts(refresh: true);
   }
 
-  void selectCategory(String category) {
-    if (selectedCategory.value == category) {
-      selectedCategory.value = '';
+  // ✅ Terima KategoriModel — tap lagi untuk deselect (kembali ke semua)
+  void selectCategory(KategoriModel kategori) {
+    if (selectedCategory.value?.id == kategori.id) {
+      selectedCategory.value = null; // deselect → tampilkan semua
     } else {
-      selectedCategory.value = category;
+      selectedCategory.value = kategori;
     }
+    loadProducts(refresh: true);
+  }
+
+  void clearCategory() {
+    selectedCategory.value = null;
     loadProducts(refresh: true);
   }
 

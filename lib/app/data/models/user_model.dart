@@ -21,18 +21,20 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: (json['_id'] ?? json['id'] ?? '').toString(),
-      name: (json['name'] ?? '').toString(),
+      // Backend MySQL pakai 'id' (int), bukan '_id' (MongoDB ObjectId)
+      // Tetap handle keduanya untuk safety
+      id: (json['id'] ?? json['_id'] ?? '').toString(),
+      name: (json['name'] ?? json['nama'] ?? '').toString(),
       email: (json['email'] ?? '').toString(),
       role: (json['role'] ?? 'buyer').toString(),
-      avatar: json['avatar']?.toString(),
-      phone: json['phone']?.toString(),
-      address: json['address']?.toString(),
+      avatar: json['avatar']?.toString() ?? json['foto']?.toString(),
+      phone: json['phone']?.toString() ?? json['telepon']?.toString(),
+      address: json['address']?.toString() ?? json['alamat']?.toString(),
       createdAt: json['createdAt'] != null
-          ? DateTime.tryParse(
-              json['createdAt'].toString(),
-            )
-          : null,
+          ? DateTime.tryParse(json['createdAt'].toString())
+          : json['created_at'] != null  // MySQL biasanya pakai snake_case
+              ? DateTime.tryParse(json['created_at'].toString())
+              : null,
     );
   }
 

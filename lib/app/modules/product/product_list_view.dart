@@ -12,15 +12,17 @@ class ProductListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<ProductListController>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     Widget body = Column(
       children: [
-        // Search + Filter
+        // ── Search ─────────────────────────────────────────────────────
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: TextField(
             controller: controller.searchController,
             onChanged: (v) {
+              // Debounce 500ms
               Future.delayed(const Duration(milliseconds: 500), () {
                 if (controller.searchController.text == v) {
                   controller.onSearch(v);
@@ -33,48 +35,79 @@ class ProductListView extends StatelessWidget {
             ),
           ),
         ),
-        // Category Filter
-        Obx(() => SizedBox(
-              height: 52,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                itemCount: controller.categories.length + 1,
-                separatorBuilder: (_, __) => const SizedBox(width: 8),
-                itemBuilder: (context, index) {
-                  final isAll = index == 0;
-                  final cat = isAll ? '' : controller.categories[index - 1];
-                  final isSelected = isAll
-                      ? controller.selectedCategory.value.isEmpty
-                      : controller.selectedCategory.value == cat;
-                  return GestureDetector(
-                    onTap: () => isAll
-                        ? controller.selectCategory('')
-                        : controller.selectCategory(cat),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
+
+        // ── Filter Kategori ─────────────────────────────────────────────
+        Obx(() {
+          // Chip "Semua" + semua kategori dari API
+          final kategoriList = controller.categories;
+
+          return SizedBox(
+            height: 52,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              // +1 untuk chip "Semua"
+              itemCount: kategoriList.length + 1,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (context, index) {
+                final isAll = index == 0;
+
+                // Chip "Semua" aktif kalau selectedCategory == null
+                final isSelected = isAll
+                    ? controller.selectedCategory.value == null
+                    : controller.selectedCategory.value?.id ==
+                        kategoriList[index - 1].id;
+
+                return GestureDetector(
+                  onTap: () {
+                    if (isAll) {
+                      controller.clearCategory(); // reset → tampilkan semua
+                    } else {
+                      // selectCategory pakai KategoriModel, bukan String
+                      controller.selectCategory(kategoriList[index - 1]);
+                    }
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? AppTheme.primaryGreen
+                          : isDark
+                              ? AppTheme.darkCard
+                              : AppTheme.grey100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
                         color: isSelected
                             ? AppTheme.primaryGreen
-                            : AppTheme.grey100,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        isAll ? 'Semua' : cat,
-                        style: TextStyle(
-                          color: isSelected ? Colors.white : AppTheme.grey600,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
-                        ),
+                            : isDark
+                                ? const Color(0xFF2D4A38)
+                                : AppTheme.grey200,
                       ),
                     ),
-                  );
-                },
-              ),
-            )),
-        // Products Grid
+                    child: Text(
+                      // Chip "Semua" pakai label statis,
+                      // chip lainnya pakai KategoriModel.nama
+                      isAll ? 'Semua' : kategoriList[index - 1].nama,
+                      style: TextStyle(
+                        color: isSelected
+                            ? Colors.white
+                            : isDark
+                                ? AppTheme.lightGreen
+                                : AppTheme.grey600,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }),
+
+        // ── Grid Produk ─────────────────────────────────────────────────
         Expanded(
           child: Obx(() {
             if (controller.isLoading.value) {
@@ -90,6 +123,7 @@ class ProductListView extends StatelessWidget {
                 itemBuilder: (_, __) => const ProductCardSkeleton(),
               );
             }
+
             if (controller.products.isEmpty) {
               return EmptyStateWidget(
                 title: 'Produk Tidak Ditemukan',
@@ -98,11 +132,12 @@ class ProductListView extends StatelessWidget {
                 buttonText: 'Reset Filter',
                 onButtonPressed: () {
                   controller.searchController.clear();
-                  controller.selectedCategory.value = '';
-                  controller.loadProducts(refresh: true);
+                  // ✅ Reset pakai null, bukan string kosong
+                  controller.clearCategory();
                 },
               );
             }
+
             return RefreshIndicator(
               onRefresh: controller.refresh,
               color: AppTheme.primaryGreen,
@@ -118,6 +153,7 @@ class ProductListView extends StatelessWidget {
                 itemCount: controller.products.length +
                     (controller.hasMore.value ? 1 : 0),
                 itemBuilder: (context, index) {
+                  // Loading indicator infinite scroll di bawah
                   if (index >= controller.products.length) {
                     return const Center(
                       child: Padding(
@@ -138,6 +174,7 @@ class ProductListView extends StatelessWidget {
       ],
     );
 
+    // isEmbedded: dipakai sebagai tab (tidak ada back button)
     if (isEmbedded) {
       return Scaffold(
         appBar: AppBar(title: const Text('Semua Produk')),

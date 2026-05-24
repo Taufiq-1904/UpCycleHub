@@ -40,11 +40,12 @@ class RegisterController extends GetxController {
     if (!formKey.currentState!.validate()) return;
     isLoading.value = true;
     try {
-      // Step 1: Register — backend-mu hanya return pesan sukses, tidak return user/token
+      // Step 1: Register — kirim role ke backend supaya tersimpan benar
       await _authRepo.register(
         name: nameController.text.trim(),
         email: emailController.text.trim(),
         password: passwordController.text,
+        role: selectedRole.value, // ← PENTING: kirim role ke API
       );
 
       // Step 2: Langsung login pakai kredensial yang baru didaftarkan
@@ -59,16 +60,14 @@ class RegisterController extends GetxController {
           loginResult['role']?.toString() ?? selectedRole.value;
 
       // Step 3: Ambil profile untuk dapat data lengkap user
-      // Simpan token dulu agar getProfile bisa pakai Authorization header
       final authService = Get.find<AuthService>();
       await authService.saveTokenOnly(token, refreshToken);
 
       UserModel user;
       try {
         user = await _authRepo.getProfile();
-        // Pastikan role sesuai yang dipilih user saat register
-        // (kalau backend tidak support role di register, override manual)
-        if (user.role == 'buyer' && selectedRole.value == 'seller') {
+        // Jika backend tidak menyimpan role dengan benar, override dari pilihan user
+        if (user.role != selectedRole.value) {
           user = user.copyWith(role: selectedRole.value);
         }
       } catch (_) {
@@ -82,7 +81,10 @@ class RegisterController extends GetxController {
       }
 
       await authService.saveUser(user, token, refreshToken: refreshToken);
-      Get.offAllNamed(AppRoutes.MAIN);
+
+      // ── Navigasi berdasarkan role ──────────────────────────────────────
+      final isSeller = user.role == 'seller';
+      Get.offAllNamed(isSeller ? AppRoutes.SELLER_MAIN : AppRoutes.MAIN);
 
       Get.snackbar(
         'Selamat Datang! 🎉',

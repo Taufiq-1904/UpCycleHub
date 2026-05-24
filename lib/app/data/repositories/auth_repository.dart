@@ -39,6 +39,7 @@ class AuthRepository {
     required String name,
     required String email,
     required String password,
+    String role = 'buyer',
   }) async {
     try {
       final response = await _apiClient.post(
@@ -47,6 +48,7 @@ class AuthRepository {
           'name': name,
           'email': email,
           'password': password,
+          'role': role,
         },
       );
 

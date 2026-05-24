@@ -77,15 +77,20 @@ class SellerProductController extends GetxController {
 
       if (editingProduct.value != null) {
         // Mode edit: cocokkan kategori berdasarkan categoryId dulu, fallback nama
-        // ProductModel may not have numeric categoryId; match by name first
         try {
           selectedCategory.value = list.firstWhere(
-            (k) =>
-                k.nama.toLowerCase() ==
-                editingProduct.value!.category.toLowerCase(),
+            (k) => k.id == editingProduct.value!.categoryId,
           );
         } catch (_) {
-          selectedCategory.value = list.isNotEmpty ? list.first : null;
+          try {
+            selectedCategory.value = list.firstWhere(
+              (k) =>
+                  k.nama.toLowerCase() ==
+                  editingProduct.value!.category.toLowerCase(),
+            );
+          } catch (_) {
+            selectedCategory.value = list.isNotEmpty ? list.first : null;
+          }
         }
       } else {
         selectedCategory.value = null;
@@ -122,9 +127,6 @@ class SellerProductController extends GetxController {
 
   // Hapus foto BARU (File lokal) yang belum diupload
   void removeNewImage(int index) => selectedImages.removeAt(index);
-
-  // Alias untuk View yang memanggil removeImage() pada foto baru
-  void removeImage(int index) => removeNewImage(index);
 
   // ✅ Hapus foto LAMA (URL) dari daftar — tidak dihapus dari Firebase
   // sampai user benar-benar simpan produk (supaya bisa cancel)

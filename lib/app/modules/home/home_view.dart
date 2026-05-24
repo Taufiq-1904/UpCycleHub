@@ -25,13 +25,12 @@ class HomeView extends StatelessWidget {
           color: AppTheme.primaryGreen,
           child: CustomScrollView(
             slivers: [
-              // App Bar
+              // ── App Bar ─────────────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                   child: Row(
                     children: [
-                      // Logo
                       Row(
                         children: [
                           Container(
@@ -58,7 +57,6 @@ class HomeView extends StatelessWidget {
                         ],
                       ),
                       const Spacer(),
-                      // Notification
                       IconButton(
                         onPressed: () => Get.toNamed(AppRoutes.NOTIFICATION),
                         icon: const Icon(Icons.notifications_outlined),
@@ -66,12 +64,10 @@ class HomeView extends StatelessWidget {
                           backgroundColor:
                               isDark ? AppTheme.darkCard : AppTheme.grey100,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                              borderRadius: BorderRadius.circular(12)),
                         ),
                       ),
                       const SizedBox(width: 8),
-                      // Cart
                       IconButton(
                         onPressed: () => Get.toNamed(AppRoutes.CART),
                         icon: const Icon(Icons.shopping_cart_outlined),
@@ -79,8 +75,7 @@ class HomeView extends StatelessWidget {
                           backgroundColor:
                               isDark ? AppTheme.darkCard : AppTheme.grey100,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                              borderRadius: BorderRadius.circular(12)),
                         ),
                       ),
                     ],
@@ -88,7 +83,7 @@ class HomeView extends StatelessWidget {
                 ),
               ),
 
-              // Greeting
+              // ── Greeting ─────────────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -100,9 +95,7 @@ class HomeView extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .headlineMedium
-                            ?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
+                            ?.copyWith(fontWeight: FontWeight.w700),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -114,7 +107,7 @@ class HomeView extends StatelessWidget {
                 ),
               ),
 
-              // Search Bar
+              // ── Search Bar ───────────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
@@ -142,9 +135,7 @@ class HomeView extends StatelessWidget {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
-                                ?.copyWith(
-                                  color: AppTheme.grey400,
-                                ),
+                                ?.copyWith(color: AppTheme.grey400),
                           ),
                         ],
                       ),
@@ -153,7 +144,7 @@ class HomeView extends StatelessWidget {
                 ),
               ),
 
-              // Banner Promo
+              // ── Banner Promo ─────────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -199,8 +190,7 @@ class HomeView extends StatelessWidget {
                                         Text(
                                           banner['subtitle']!,
                                           style: TextStyle(
-                                            color:
-                                                Colors.white.withOpacity(0.85),
+                                            color: Colors.white.withOpacity(0.85),
                                             fontSize: 13,
                                           ),
                                         ),
@@ -252,17 +242,15 @@ class HomeView extends StatelessWidget {
                 ),
               ),
 
-              // Category
+              // ── Kategori ─────────────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Kategori',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
+                      Text('Kategori',
+                          style: Theme.of(context).textTheme.headlineSmall),
                       TextButton(
                         onPressed: () => Get.toNamed(AppRoutes.PRODUCT_LIST),
                         child: const Text('Lihat Semua'),
@@ -272,62 +260,101 @@ class HomeView extends StatelessWidget {
                 ),
               ),
               SliverToBoxAdapter(
-                child: Obx(() => SizedBox(
+                child: Obx(() {
+                  if (controller.categories.isEmpty) {
+                    // Skeleton loading saat kategori belum datang
+                    return SizedBox(
                       height: 50,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        itemCount: controller.categories.length,
+                        itemCount: 5,
                         separatorBuilder: (_, __) => const SizedBox(width: 8),
-                        itemBuilder: (context, index) {
-                          final cat = controller.categories[index];
-                          return GestureDetector(
-                            onTap: () => Get.toNamed(
-                              AppRoutes.PRODUCT_LIST,
-                              arguments: {'category': cat},
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: isDark
-                                    ? AppTheme.darkCard
-                                    : AppTheme.softGreen,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: isDark
-                                      ? const Color(0xFF2D4A38)
-                                      : AppTheme.accentGreen.withOpacity(0.5),
-                                ),
-                              ),
-                              child: Text(
-                                cat,
-                                style: TextStyle(
-                                  color: isDark
-                                      ? AppTheme.lightGreen
-                                      : AppTheme.primaryGreen,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
+                        itemBuilder: (_, __) => Container(
+                          width: 80,
+                          height: 38,
+                          decoration: BoxDecoration(
+                            color: isDark
+                                ? AppTheme.darkCard
+                                : AppTheme.grey100,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
                       ),
-                    )),
+                    );
+                  }
+
+                  return SizedBox(
+                    height: 50,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      itemCount: controller.categories.length,
+                      separatorBuilder: (_, __) => const SizedBox(width: 8),
+                      itemBuilder: (context, index) {
+                        final kategori = controller.categories[index];
+                        final isSelected =
+                            controller.selectedCategory.value?.id == kategori.id;
+
+                        return GestureDetector(
+                          onTap: () {
+                            // Tap di home → buka ProductList dengan filter kategori
+                            // Kirim KategoriModel (bukan String) supaya controller
+                            // bisa langsung pakai tanpa perlu parse ulang
+                            Get.toNamed(
+                              AppRoutes.PRODUCT_LIST,
+                              arguments: {'category': kategori},
+                            );
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? AppTheme.primaryGreen
+                                  : isDark
+                                      ? AppTheme.darkCard
+                                      : AppTheme.softGreen,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: isSelected
+                                    ? AppTheme.primaryGreen
+                                    : isDark
+                                        ? const Color(0xFF2D4A38)
+                                        : AppTheme.accentGreen.withOpacity(0.5),
+                              ),
+                            ),
+                            child: Text(
+                              // ✅ Tampilkan .nama (String), bukan objek KategoriModel
+                              kategori.nama,
+                              style: TextStyle(
+                                color: isSelected
+                                    ? Colors.white
+                                    : isDark
+                                        ? AppTheme.lightGreen
+                                        : AppTheme.primaryGreen,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }),
               ),
 
-              // Featured Products
+              // ── Produk Unggulan ──────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Produk Unggulan',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
+                      Text('Produk Unggulan',
+                          style: Theme.of(context).textTheme.headlineSmall),
                       TextButton(
                         onPressed: () => Get.toNamed(AppRoutes.PRODUCT_LIST),
                         child: const Text('Lihat Semua'),
@@ -352,34 +379,40 @@ class HomeView extends StatelessWidget {
                                 child: ProductCardSkeleton(),
                               ),
                             )
-                          : ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-                              itemCount: controller.featuredProducts.length,
-                              separatorBuilder: (_, __) =>
-                                  const SizedBox(width: 12),
-                              itemBuilder: (context, index) => SizedBox(
-                                width: 180,
-                                child: ProductCard(
-                                  product: controller.featuredProducts[index],
-                                  isCompact: true,
+                          : controller.featuredProducts.isEmpty
+                              ? const Center(
+                                  child: Text('Belum ada produk',
+                                      style:
+                                          TextStyle(color: AppTheme.grey400)))
+                              : ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  padding: const EdgeInsets.fromLTRB(
+                                      20, 8, 20, 8),
+                                  itemCount:
+                                      controller.featuredProducts.length,
+                                  separatorBuilder: (_, __) =>
+                                      const SizedBox(width: 12),
+                                  itemBuilder: (context, index) => SizedBox(
+                                    width: 180,
+                                    child: ProductCard(
+                                      product:
+                                          controller.featuredProducts[index],
+                                      isCompact: true,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
                     )),
               ),
 
-              // Popular Products
+              // ── Produk Terlaris ──────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Produk Terlaris',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
+                      Text('Produk Terlaris',
+                          style: Theme.of(context).textTheme.headlineSmall),
                       TextButton(
                         onPressed: () => Get.toNamed(AppRoutes.PRODUCT_LIST),
                         child: const Text('Lihat Semua'),

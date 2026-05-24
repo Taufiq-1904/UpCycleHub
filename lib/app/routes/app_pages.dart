@@ -5,6 +5,7 @@ import '../modules/auth/register_binding.dart';
 import '../modules/auth/register_view.dart';
 import '../modules/home/home_binding.dart';
 import '../modules/home/main_view.dart';
+import '../modules/home/seller_main_view.dart'; // ← BARU
 import '../modules/product/product_list_binding.dart';
 import '../modules/product/product_list_view.dart';
 import '../modules/product/product_detail_binding.dart';
@@ -49,6 +50,8 @@ class AppPages {
       page: () => const RegisterView(),
       binding: RegisterBinding(),
     ),
+
+    // ── Buyer main (home buyer + bottom nav buyer) ─────────────────────────
     GetPage(
       name: AppRoutes.MAIN,
       page: () => const MainView(),
@@ -59,6 +62,21 @@ class AppPages {
       page: () => const MainView(),
       binding: HomeBinding(),
     ),
+
+    // ── Seller main (dashboard + bottom nav seller) ← BARU ───────────────
+    GetPage(
+      name: AppRoutes.SELLER_MAIN,
+      page: () => const SellerMainView(),
+      // SellerMainView menampilkan beberapa halaman sekaligus,
+      // jadi kita bind semua dependency yang dibutuhkan di sini
+      bindings: [
+        SellerDashboardBinding(),
+        SellerProductBinding(),
+        ChatListBinding(),
+        ProfileBinding(),
+      ],
+    ),
+
     GetPage(
       name: AppRoutes.PRODUCT_LIST,
       page: () => const ProductListView(),

@@ -72,45 +72,7 @@ class SellerAddProductView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // Preview foto LAMA dari Firebase (mode edit)
-                        ...controller.existingImageUrls
-                            .asMap()
-                            .entries
-                            .map((entry) => Stack(
-                                  clipBehavior: Clip.none,
-                                  children: [
-                                    Container(
-                                      width: 90,
-                                      height: 90,
-                                      margin: const EdgeInsets.only(right: 10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        image: DecorationImage(
-                                          image: NetworkImage(entry.value),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: -6,
-                                      right: 4,
-                                      child: GestureDetector(
-                                        onTap: () => controller
-                                            .removeExistingImage(entry.key),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(3),
-                                          decoration: const BoxDecoration(
-                                            color: AppTheme.errorRed,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: const Icon(Icons.close_rounded,
-                                              color: Colors.white, size: 13),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                        // Preview foto BARU yang dipilih dari galeri (File lokal)
+                        // Preview foto yang sudah dipilih
                         ...controller.selectedImages
                             .asMap()
                             .entries
@@ -168,6 +130,7 @@ class SellerAddProductView extends StatelessWidget {
               _label(context, 'Kategori'),
               const SizedBox(height: 8),
               Obx(() {
+                // Loading state: kategori belum datang dari API
                 if (controller.categories.isEmpty) {
                   return Container(
                     height: 56,
@@ -196,6 +159,9 @@ class SellerAddProductView extends StatelessWidget {
                   );
                 }
 
+                // ✅ Kunci fix: pakai `value` bukan `initialValue`
+                // `value` selalu sinkron dengan selectedCategory.value dari controller
+                // `initialValue` hanya dibaca sekali saat widget pertama dibuat → tidak reaktif
                 return DropdownButtonFormField<KategoriModel>(
                   value: controller.selectedCategory.value,
                   hint: const Text('Pilih kategori'),
@@ -225,6 +191,7 @@ class SellerAddProductView extends StatelessWidget {
                           color: AppTheme.errorRed, width: 1.5),
                     ),
                   ),
+                  // KategoriModel.operator== cek berdasarkan id, jadi matching benar
                   items: controller.categories
                       .map((k) => DropdownMenuItem<KategoriModel>(
                             value: k,
@@ -288,6 +255,7 @@ class SellerAddProductView extends StatelessWidget {
 
               // ── Tombol Simpan / Progress Upload ───────────────────────
               Obx(() {
+                // Tampilkan progress khusus saat foto sedang diupload ke Firebase
                 if (controller.isUploadingImages.value) {
                   return Container(
                     width: double.infinity,
